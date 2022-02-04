@@ -1,0 +1,1202 @@
+GAS LISTING /tmp/ccuIdrr6.s 			page 1
+
+
+   1              		.file	"liobt.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.lio_init_bt,"ax",@progbits
+  10              		.align	1
+  11              		.globl	lio_init_bt
+  13              	lio_init_bt:
+  14              	.LFB2:
+  15              		.file 1 "liobt.c"
+   1:liobt.c       **** #include "gd32vf103.h"
+   2:liobt.c       **** #include "liobt.h"
+   3:liobt.c       **** 
+   4:liobt.c       **** 
+   5:liobt.c       **** char rx_dma_buffer[LIO_BT_BUFFER_SIZE] = {'\0'};
+   6:liobt.c       **** char tx_dma_buffer[LIO_BT_BUFFER_SIZE] = {'\0'};
+   7:liobt.c       **** 
+   8:liobt.c       **** 
+   9:liobt.c       **** void lio_init_bt()
+  10:liobt.c       **** {
+  16              		.loc 1 10 1
+  17              		.cfi_startproc
+  11:liobt.c       ****     dma_parameter_struct dma_init_struct;
+  18              		.loc 1 11 5
+  12:liobt.c       ****     /* enable DMA0 */
+  13:liobt.c       ****     rcu_periph_clock_enable(RCU_DMA0);
+  19              		.loc 1 13 5
+  10:liobt.c       ****     dma_parameter_struct dma_init_struct;
+  20              		.loc 1 10 1 is_stmt 0
+  21 0000 7971     		addi	sp,sp,-48
+  22              	.LCFI0:
+  23              		.cfi_def_cfa_offset 48
+  24              		.loc 1 13 5
+  25 0002 13050050 		li	a0,1280
+  10:liobt.c       ****     dma_parameter_struct dma_init_struct;
+  26              		.loc 1 10 1
+  27 0006 06D6     		sw	ra,44(sp)
+  28 0008 22D4     		sw	s0,40(sp)
+  29              		.cfi_offset 1, -4
+  30              		.cfi_offset 8, -8
+  31              		.loc 1 13 5
+  32 000a 97000000 		call	rcu_periph_clock_enable
+  32      E7800000 
+  33              	.LVL0:
+  14:liobt.c       ****     /* initialize USART */
+  15:liobt.c       ****     rcu_periph_clock_enable(RCU_GPIOA);
+  34              		.loc 1 15 5 is_stmt 1
+  35 0012 13052060 		li	a0,1538
+  36 0016 97000000 		call	rcu_periph_clock_enable
+  36      E7800000 
+  37              	.LVL1:
+  16:liobt.c       **** 
+  17:liobt.c       ****     /* enable USART clock */
+GAS LISTING /tmp/ccuIdrr6.s 			page 2
+
+
+  18:liobt.c       ****     rcu_periph_clock_enable(RCU_USART0);
+  38              		.loc 1 18 5
+  39 001e 1305E060 		li	a0,1550
+  40 0022 97000000 		call	rcu_periph_clock_enable
+  40      E7800000 
+  41              	.LVL2:
+  19:liobt.c       **** 
+  20:liobt.c       ****     /* connect port to USARTx_Tx */
+  21:liobt.c       ****     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+  42              		.loc 1 21 5
+  43 002a 37140140 		li	s0,1073811456
+  44 002e 13050480 		addi	a0,s0,-2048
+  45 0032 93060020 		li	a3,512
+  46 0036 0D46     		li	a2,3
+  47 0038 E145     		li	a1,24
+  48 003a 97000000 		call	gpio_init
+  48      E7800000 
+  49              	.LVL3:
+  22:liobt.c       **** 
+  23:liobt.c       ****     /* connect port to USARTx_Rx */
+  24:liobt.c       ****     gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+  50              		.loc 1 24 5
+  51 0042 93060040 		li	a3,1024
+  52 0046 0D46     		li	a2,3
+  53 0048 9145     		li	a1,4
+  54 004a 13050480 		addi	a0,s0,-2048
+  55 004e 97000000 		call	gpio_init
+  55      E7800000 
+  56              	.LVL4:
+  25:liobt.c       **** 
+  26:liobt.c       ****     /* USART configure */
+  27:liobt.c       ****     usart_deinit(USART0);
+  57              		.loc 1 27 5
+  58 0056 37440140 		li	s0,1073823744
+  59 005a 13050480 		addi	a0,s0,-2048
+  60 005e 97000000 		call	usart_deinit
+  60      E7800000 
+  61              	.LVL5:
+  28:liobt.c       ****     usart_baudrate_set(USART0, 115200U);
+  62              		.loc 1 28 5
+  63 0066 F165     		li	a1,114688
+  64 0068 13050480 		addi	a0,s0,-2048
+  65 006c 93850520 		addi	a1,a1,512
+  66 0070 97000000 		call	usart_baudrate_set
+  66      E7800000 
+  67              	.LVL6:
+  29:liobt.c       ****     usart_word_length_set(USART0, USART_WL_8BIT);
+  68              		.loc 1 29 5
+  69 0078 13050480 		addi	a0,s0,-2048
+  70 007c 8145     		li	a1,0
+  71 007e 97000000 		call	usart_word_length_set
+  71      E7800000 
+  72              	.LVL7:
+  30:liobt.c       ****     usart_stop_bit_set(USART0, USART_STB_1BIT);
+  73              		.loc 1 30 5
+  74 0086 13050480 		addi	a0,s0,-2048
+  75 008a 8145     		li	a1,0
+GAS LISTING /tmp/ccuIdrr6.s 			page 3
+
+
+  76 008c 97000000 		call	usart_stop_bit_set
+  76      E7800000 
+  77              	.LVL8:
+  31:liobt.c       ****     usart_parity_config(USART0, USART_PM_NONE);
+  78              		.loc 1 31 5
+  79 0094 13050480 		addi	a0,s0,-2048
+  80 0098 8145     		li	a1,0
+  81 009a 97000000 		call	usart_parity_config
+  81      E7800000 
+  82              	.LVL9:
+  32:liobt.c       ****     usart_hardware_flow_rts_config(USART0, USART_RTS_DISABLE);
+  83              		.loc 1 32 5
+  84 00a2 13050480 		addi	a0,s0,-2048
+  85 00a6 8145     		li	a1,0
+  86 00a8 97000000 		call	usart_hardware_flow_rts_config
+  86      E7800000 
+  87              	.LVL10:
+  33:liobt.c       ****     usart_hardware_flow_cts_config(USART0, USART_CTS_DISABLE);
+  88              		.loc 1 33 5
+  89 00b0 13050480 		addi	a0,s0,-2048
+  90 00b4 8145     		li	a1,0
+  91 00b6 97000000 		call	usart_hardware_flow_cts_config
+  91      E7800000 
+  92              	.LVL11:
+  34:liobt.c       ****     usart_receive_config(USART0, USART_RECEIVE_ENABLE);
+  93              		.loc 1 34 5
+  94 00be 13050480 		addi	a0,s0,-2048
+  95 00c2 9145     		li	a1,4
+  96 00c4 97000000 		call	usart_receive_config
+  96      E7800000 
+  97              	.LVL12:
+  35:liobt.c       ****     usart_transmit_config(USART0, USART_TRANSMIT_ENABLE);
+  98              		.loc 1 35 5
+  99 00cc A145     		li	a1,8
+ 100 00ce 13050480 		addi	a0,s0,-2048
+ 101 00d2 97000000 		call	usart_transmit_config
+ 101      E7800000 
+ 102              	.LVL13:
+  36:liobt.c       ****     usart_enable(USART0);
+ 103              		.loc 1 36 5
+ 104 00da 13050480 		addi	a0,s0,-2048
+ 105 00de 97000000 		call	usart_enable
+ 105      E7800000 
+ 106              	.LVL14:
+  37:liobt.c       **** 
+  38:liobt.c       ****     usart_dma_transmit_config(USART0, USART_DENT_ENABLE);
+ 107              		.loc 1 38 5
+ 108 00e6 13050480 		addi	a0,s0,-2048
+ 109 00ea 93050008 		li	a1,128
+ 110 00ee 97000000 		call	usart_dma_transmit_config
+ 110      E7800000 
+ 111              	.LVL15:
+  39:liobt.c       ****     usart_dma_receive_config(USART0, USART_DENR_ENABLE);
+ 112              		.loc 1 39 5
+ 113 00f6 13050480 		addi	a0,s0,-2048
+ 114 00fa 93050004 		li	a1,64
+ 115 00fe 97000000 		call	usart_dma_receive_config
+GAS LISTING /tmp/ccuIdrr6.s 			page 4
+
+
+ 115      E7800000 
+ 116              	.LVL16:
+  40:liobt.c       **** 
+  41:liobt.c       ****    
+  42:liobt.c       **** 
+  43:liobt.c       ****     dma_deinit(DMA0, DMA_CH4);
+ 117              		.loc 1 43 5
+ 118 0106 9145     		li	a1,4
+ 119 0108 37050240 		li	a0,1073872896
+ 120 010c 97000000 		call	dma_deinit
+ 120      E7800000 
+ 121              	.LVL17:
+  44:liobt.c       ****     dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+ 122              		.loc 1 44 5
+  45:liobt.c       ****     dma_init_struct.memory_addr = (uint32_t)rx_dma_buffer;
+ 123              		.loc 1 45 5
+ 124              		.loc 1 45 33 is_stmt 0
+ 125 0114 B7070000 		lui	a5,%hi(.LANCHOR0)
+ 126 0118 93870700 		addi	a5,a5,%lo(.LANCHOR0)
+ 127 011c 3EC6     		sw	a5,12(sp)
+  46:liobt.c       ****     dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 128              		.loc 1 46 5 is_stmt 1
+  47:liobt.c       ****     dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 129              		.loc 1 47 5
+  48:liobt.c       ****     dma_init_struct.number = LIO_BT_BUFFER_SIZE;
+ 130              		.loc 1 48 5
+  49:liobt.c       ****     dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART0);
+ 131              		.loc 1 49 5
+  48:liobt.c       ****     dma_init_struct.number = LIO_BT_BUFFER_SIZE;
+ 132              		.loc 1 48 28 is_stmt 0
+ 133 011e 93070040 		li	a5,1024
+ 134 0122 3ECA     		sw	a5,20(sp)
+  50:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+  51:liobt.c       ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+  52:liobt.c       ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 135              		.loc 1 52 30
+ 136 0124 8D67     		li	a5,12288
+  53:liobt.c       ****     dma_init(DMA0, DMA_CH4, &dma_init_struct);
+ 137              		.loc 1 53 5
+ 138 0126 5000     		addi	a2,sp,4
+  52:liobt.c       ****     dma_init(DMA0, DMA_CH4, &dma_init_struct);
+ 139              		.loc 1 52 30
+ 140 0128 3ECC     		sw	a5,24(sp)
+ 141              		.loc 1 53 5
+ 142 012a 9145     		li	a1,4
+  50:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 143              		.loc 1 50 32
+ 144 012c 93070010 		li	a5,256
+ 145              		.loc 1 53 5
+ 146 0130 37050240 		li	a0,1073872896
+  49:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 147              		.loc 1 49 33
+ 148 0134 13044480 		addi	s0,s0,-2044
+  50:liobt.c       ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 149              		.loc 1 50 32
+ 150 0138 231EF100 		sh	a5,28(sp)
+  49:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+GAS LISTING /tmp/ccuIdrr6.s 			page 5
+
+
+ 151              		.loc 1 49 33
+ 152 013c 22C2     		sw	s0,4(sp)
+  50:liobt.c       ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 153              		.loc 1 50 5 is_stmt 1
+  51:liobt.c       ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 154              		.loc 1 51 5
+  51:liobt.c       ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 155              		.loc 1 51 34 is_stmt 0
+ 156 013e 02C4     		sw	zero,8(sp)
+  52:liobt.c       ****     dma_init(DMA0, DMA_CH4, &dma_init_struct);
+ 157              		.loc 1 52 5 is_stmt 1
+  47:liobt.c       ****     dma_init_struct.number = LIO_BT_BUFFER_SIZE;
+ 158              		.loc 1 47 34 is_stmt 0
+ 159 0140 02C8     		sw	zero,16(sp)
+  44:liobt.c       ****     dma_init_struct.memory_addr = (uint32_t)rx_dma_buffer;
+ 160              		.loc 1 44 31
+ 161 0142 230F0100 		sb	zero,30(sp)
+ 162              		.loc 1 53 5 is_stmt 1
+ 163 0146 97000000 		call	dma_init
+ 163      E7800000 
+ 164              	.LVL18:
+  54:liobt.c       ****         /* configure DMA mode */
+  55:liobt.c       ****     dma_circulation_disable(DMA0, DMA_CH4);
+ 165              		.loc 1 55 5
+ 166 014e 9145     		li	a1,4
+ 167 0150 37050240 		li	a0,1073872896
+ 168 0154 97000000 		call	dma_circulation_disable
+ 168      E7800000 
+ 169              	.LVL19:
+  56:liobt.c       ****         /* enable DMA channel4 */
+  57:liobt.c       ****     dma_channel_enable(DMA0, DMA_CH4);
+ 170              		.loc 1 57 5
+ 171 015c 9145     		li	a1,4
+ 172 015e 37050240 		li	a0,1073872896
+ 173 0162 97000000 		call	dma_channel_enable
+ 173      E7800000 
+ 174              	.LVL20:
+  58:liobt.c       **** }
+ 175              		.loc 1 58 1 is_stmt 0
+ 176 016a B250     		lw	ra,44(sp)
+ 177              		.cfi_restore 1
+ 178 016c 2254     		lw	s0,40(sp)
+ 179              		.cfi_restore 8
+ 180 016e 4561     		addi	sp,sp,48
+ 181              	.LCFI1:
+ 182              		.cfi_def_cfa_offset 0
+ 183 0170 8280     		jr	ra
+ 184              		.cfi_endproc
+ 185              	.LFE2:
+ 187              		.section	.text.lio_read_bt,"ax",@progbits
+ 188              		.align	1
+ 189              		.globl	lio_read_bt
+ 191              	lio_read_bt:
+ 192              	.LFB3:
+  59:liobt.c       **** 
+  60:liobt.c       **** size_t lio_read_bt(char* buffer, uint32_t size)
+  61:liobt.c       **** {
+GAS LISTING /tmp/ccuIdrr6.s 			page 6
+
+
+ 193              		.loc 1 61 1 is_stmt 1
+ 194              		.cfi_startproc
+ 195              	.LVL21:
+  62:liobt.c       ****     if(rx_dma_buffer[0] != 0)
+ 196              		.loc 1 62 5
+  61:liobt.c       ****     if(rx_dma_buffer[0] != 0)
+ 197              		.loc 1 61 1 is_stmt 0
+ 198 0000 7971     		addi	sp,sp,-48
+ 199              	.LCFI2:
+ 200              		.cfi_def_cfa_offset 48
+ 201              		.loc 1 62 21
+ 202 0002 B7070000 		lui	a5,%hi(.LANCHOR0)
+  61:liobt.c       ****     if(rx_dma_buffer[0] != 0)
+ 203              		.loc 1 61 1
+ 204 0006 26D2     		sw	s1,36(sp)
+ 205              		.cfi_offset 9, -12
+ 206              		.loc 1 62 21
+ 207 0008 93840700 		addi	s1,a5,%lo(.LANCHOR0)
+ 208 000c 03C70400 		lbu	a4,0(s1)
+  61:liobt.c       ****     if(rx_dma_buffer[0] != 0)
+ 209              		.loc 1 61 1
+ 210 0010 22D4     		sw	s0,40(sp)
+ 211 0012 06D6     		sw	ra,44(sp)
+ 212              		.cfi_offset 8, -8
+ 213              		.cfi_offset 1, -4
+  63:liobt.c       ****     {
+  64:liobt.c       ****         int i = 0;
+  65:liobt.c       ****         for(; i < LIO_BT_BUFFER_SIZE && rx_dma_buffer[i] != 0 && i < size - 1; i++){
+  66:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+  67:liobt.c       ****             rx_dma_buffer[i] = 0;
+  68:liobt.c       ****         }
+  69:liobt.c       ****         buffer[i] = '\0';
+  70:liobt.c       **** 
+  71:liobt.c       ****         dma_parameter_struct dma_init_struct;
+  72:liobt.c       **** 
+  73:liobt.c       ****         dma_deinit(DMA0, DMA_CH4);
+  74:liobt.c       ****         dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+  75:liobt.c       ****         dma_init_struct.memory_addr = (uint32_t)rx_dma_buffer;
+  76:liobt.c       ****         dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+  77:liobt.c       ****         dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+  78:liobt.c       ****         dma_init_struct.number = LIO_BT_BUFFER_SIZE;
+  79:liobt.c       ****         dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART0);
+  80:liobt.c       ****         dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+  81:liobt.c       ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+  82:liobt.c       ****         dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+  83:liobt.c       ****         dma_init(DMA0, DMA_CH4, &dma_init_struct);
+  84:liobt.c       ****         /* configure DMA mode */
+  85:liobt.c       ****         dma_circulation_disable(DMA0, DMA_CH4);
+  86:liobt.c       ****         /* enable DMA channel4 */
+  87:liobt.c       ****         dma_channel_enable(DMA0, DMA_CH4);
+  88:liobt.c       ****         return i;
+  89:liobt.c       ****     }
+  90:liobt.c       ****     return 0;
+ 214              		.loc 1 90 12
+ 215 0014 0144     		li	s0,0
+  62:liobt.c       ****     {
+ 216              		.loc 1 62 7
+GAS LISTING /tmp/ccuIdrr6.s 			page 7
+
+
+ 217 0016 19E7     		bne	a4,zero,.L13
+  91:liobt.c       **** }
+ 218              		.loc 1 91 1
+ 219 0018 2285     		mv	a0,s0
+ 220              	.LVL22:
+ 221 001a B250     		lw	ra,44(sp)
+ 222              		.cfi_remember_state
+ 223              		.cfi_restore 1
+ 224 001c 2254     		lw	s0,40(sp)
+ 225              		.cfi_restore 8
+ 226 001e 9254     		lw	s1,36(sp)
+ 227              		.cfi_restore 9
+ 228 0020 4561     		addi	sp,sp,48
+ 229              	.LCFI3:
+ 230              		.cfi_def_cfa_offset 0
+ 231 0022 8280     		jr	ra
+ 232              	.LVL23:
+ 233              	.L13:
+ 234              	.LCFI4:
+ 235              		.cfi_restore_state
+ 236 0024 2A86     		mv	a2,a0
+ 237 0026 FD15     		addi	a1,a1,-1
+ 238              	.LVL24:
+  62:liobt.c       ****     {
+ 239              		.loc 1 62 7
+ 240 0028 93870700 		addi	a5,a5,%lo(.LANCHOR0)
+ 241              	.LBB2:
+  64:liobt.c       ****         for(; i < LIO_BT_BUFFER_SIZE && rx_dma_buffer[i] != 0 && i < size - 1; i++){
+ 242              		.loc 1 64 13
+ 243 002c 8146     		li	a3,0
+  65:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+ 244              		.loc 1 65 9
+ 245 002e 93080040 		li	a7,1024
+ 246              	.LVL25:
+ 247              	.L9:
+  66:liobt.c       ****             rx_dma_buffer[i] = 0;
+ 248              		.loc 1 66 13 is_stmt 1 discriminator 3
+ 249 0032 3684     		mv	s0,a3
+ 250 0034 3288     		mv	a6,a2
+  65:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+ 251              		.loc 1 65 81 is_stmt 0 discriminator 3
+ 252 0036 8506     		addi	a3,a3,1
+ 253              	.LVL26:
+  65:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+ 254              		.loc 1 65 63 discriminator 3
+ 255 0038 6301B402 		beq	s0,a1,.L8
+  66:liobt.c       ****             rx_dma_buffer[i] = 0;
+ 256              		.loc 1 66 23 discriminator 4
+ 257 003c 2300E600 		sb	a4,0(a2)
+  67:liobt.c       ****         }
+ 258              		.loc 1 67 13 is_stmt 1 discriminator 4
+  67:liobt.c       ****         }
+ 259              		.loc 1 67 30 is_stmt 0 discriminator 4
+ 260 0040 23800700 		sb	zero,0(a5)
+  65:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+ 261              		.loc 1 65 9 discriminator 4
+ 262 0044 63831609 		beq	a3,a7,.L14
+GAS LISTING /tmp/ccuIdrr6.s 			page 8
+
+
+  65:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+ 263              		.loc 1 65 54 discriminator 2
+ 264 0048 03C71700 		lbu	a4,1(a5)
+ 265 004c 13061800 		addi	a2,a6,1
+ 266 0050 8507     		addi	a5,a5,1
+  65:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+ 267              		.loc 1 65 38 discriminator 2
+ 268 0052 65F3     		bne	a4,zero,.L9
+ 269 0054 3684     		mv	s0,a3
+ 270 0056 3308D500 		add	a6,a0,a3
+ 271              	.L8:
+  69:liobt.c       **** 
+ 272              		.loc 1 69 9 is_stmt 1
+  69:liobt.c       **** 
+ 273              		.loc 1 69 19 is_stmt 0
+ 274 005a 23000800 		sb	zero,0(a6)
+  71:liobt.c       **** 
+ 275              		.loc 1 71 9 is_stmt 1
+  73:liobt.c       ****         dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+ 276              		.loc 1 73 9
+ 277 005e 9145     		li	a1,4
+ 278              	.LVL27:
+ 279 0060 37050240 		li	a0,1073872896
+ 280              	.LVL28:
+ 281 0064 97000000 		call	dma_deinit
+ 281      E7800000 
+ 282              	.LVL29:
+  74:liobt.c       ****         dma_init_struct.memory_addr = (uint32_t)rx_dma_buffer;
+ 283              		.loc 1 74 9
+  75:liobt.c       ****         dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 284              		.loc 1 75 9
+  79:liobt.c       ****         dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 285              		.loc 1 79 37 is_stmt 0
+ 286 006c B7470140 		li	a5,1073823744
+ 287 0070 93874780 		addi	a5,a5,-2044
+ 288 0074 3EC2     		sw	a5,4(sp)
+  78:liobt.c       ****         dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART0);
+ 289              		.loc 1 78 32
+ 290 0076 93070040 		li	a5,1024
+ 291 007a 3ECA     		sw	a5,20(sp)
+  82:liobt.c       ****         dma_init(DMA0, DMA_CH4, &dma_init_struct);
+ 292              		.loc 1 82 34
+ 293 007c 8D67     		li	a5,12288
+  83:liobt.c       ****         /* configure DMA mode */
+ 294              		.loc 1 83 9
+ 295 007e 5000     		addi	a2,sp,4
+  82:liobt.c       ****         dma_init(DMA0, DMA_CH4, &dma_init_struct);
+ 296              		.loc 1 82 34
+ 297 0080 3ECC     		sw	a5,24(sp)
+  83:liobt.c       ****         /* configure DMA mode */
+ 298              		.loc 1 83 9
+ 299 0082 9145     		li	a1,4
+  80:liobt.c       ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 300              		.loc 1 80 36
+ 301 0084 93070010 		li	a5,256
+  83:liobt.c       ****         /* configure DMA mode */
+ 302              		.loc 1 83 9
+GAS LISTING /tmp/ccuIdrr6.s 			page 9
+
+
+ 303 0088 37050240 		li	a0,1073872896
+  80:liobt.c       ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 304              		.loc 1 80 36
+ 305 008c 231EF100 		sh	a5,28(sp)
+  75:liobt.c       ****         dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 306              		.loc 1 75 37
+ 307 0090 26C6     		sw	s1,12(sp)
+  76:liobt.c       ****         dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 308              		.loc 1 76 9 is_stmt 1
+  77:liobt.c       ****         dma_init_struct.number = LIO_BT_BUFFER_SIZE;
+ 309              		.loc 1 77 9
+  78:liobt.c       ****         dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART0);
+ 310              		.loc 1 78 9
+  79:liobt.c       ****         dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 311              		.loc 1 79 9
+  80:liobt.c       ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 312              		.loc 1 80 9
+  81:liobt.c       ****         dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 313              		.loc 1 81 9
+  81:liobt.c       ****         dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 314              		.loc 1 81 38 is_stmt 0
+ 315 0092 02C4     		sw	zero,8(sp)
+  82:liobt.c       ****         dma_init(DMA0, DMA_CH4, &dma_init_struct);
+ 316              		.loc 1 82 9 is_stmt 1
+  77:liobt.c       ****         dma_init_struct.number = LIO_BT_BUFFER_SIZE;
+ 317              		.loc 1 77 38 is_stmt 0
+ 318 0094 02C8     		sw	zero,16(sp)
+  74:liobt.c       ****         dma_init_struct.memory_addr = (uint32_t)rx_dma_buffer;
+ 319              		.loc 1 74 35
+ 320 0096 230F0100 		sb	zero,30(sp)
+  83:liobt.c       ****         /* configure DMA mode */
+ 321              		.loc 1 83 9 is_stmt 1
+ 322 009a 97000000 		call	dma_init
+ 322      E7800000 
+ 323              	.LVL30:
+  85:liobt.c       ****         /* enable DMA channel4 */
+ 324              		.loc 1 85 9
+ 325 00a2 9145     		li	a1,4
+ 326 00a4 37050240 		li	a0,1073872896
+ 327 00a8 97000000 		call	dma_circulation_disable
+ 327      E7800000 
+ 328              	.LVL31:
+  87:liobt.c       ****         return i;
+ 329              		.loc 1 87 9
+ 330 00b0 37050240 		li	a0,1073872896
+ 331 00b4 9145     		li	a1,4
+ 332 00b6 97000000 		call	dma_channel_enable
+ 332      E7800000 
+ 333              	.LVL32:
+  88:liobt.c       ****     }
+ 334              		.loc 1 88 9
+ 335              	.LBE2:
+ 336              		.loc 1 91 1 is_stmt 0
+ 337 00be 2285     		mv	a0,s0
+ 338 00c0 B250     		lw	ra,44(sp)
+ 339              		.cfi_remember_state
+ 340              		.cfi_restore 1
+GAS LISTING /tmp/ccuIdrr6.s 			page 10
+
+
+ 341 00c2 2254     		lw	s0,40(sp)
+ 342              		.cfi_restore 8
+ 343 00c4 9254     		lw	s1,36(sp)
+ 344              		.cfi_restore 9
+ 345 00c6 4561     		addi	sp,sp,48
+ 346              	.LCFI5:
+ 347              		.cfi_def_cfa_offset 0
+ 348 00c8 8280     		jr	ra
+ 349              	.LVL33:
+ 350              	.L14:
+ 351              	.LCFI6:
+ 352              		.cfi_restore_state
+ 353 00ca 13080540 		addi	a6,a0,1024
+ 354              	.LBB3:
+  65:liobt.c       ****             buffer[i] = rx_dma_buffer[i];
+ 355              		.loc 1 65 9
+ 356 00ce 13040040 		li	s0,1024
+ 357 00d2 61B7     		j	.L8
+ 358              	.LBE3:
+ 359              		.cfi_endproc
+ 360              	.LFE3:
+ 362              		.section	.text.lio_send_bt,"ax",@progbits
+ 363              		.align	1
+ 364              		.globl	lio_send_bt
+ 366              	lio_send_bt:
+ 367              	.LFB4:
+  92:liobt.c       **** 
+  93:liobt.c       **** size_t lio_send_bt(char* message, uint32_t size)
+  94:liobt.c       **** {
+ 368              		.loc 1 94 1 is_stmt 1
+ 369              		.cfi_startproc
+ 370              	.LVL34:
+  95:liobt.c       ****     for(int i = 0; i < size && i < LIO_BT_BUFFER_SIZE; i++) {
+ 371              		.loc 1 95 5
+ 372              	.LBB4:
+ 373              		.loc 1 95 9
+ 374              	.LBE4:
+  94:liobt.c       ****     for(int i = 0; i < size && i < LIO_BT_BUFFER_SIZE; i++) {
+ 375              		.loc 1 94 1 is_stmt 0
+ 376 0000 7971     		addi	sp,sp,-48
+ 377              	.LCFI7:
+ 378              		.cfi_def_cfa_offset 48
+ 379 0002 22D4     		sw	s0,40(sp)
+ 380 0004 26D2     		sw	s1,36(sp)
+ 381 0006 06D6     		sw	ra,44(sp)
+ 382              		.cfi_offset 8, -8
+ 383              		.cfi_offset 9, -12
+ 384              		.cfi_offset 1, -4
+ 385 0008 B7040000 		lui	s1,%hi(.LANCHOR1)
+  94:liobt.c       ****     for(int i = 0; i < size && i < LIO_BT_BUFFER_SIZE; i++) {
+ 386              		.loc 1 94 1
+ 387 000c 2E84     		mv	s0,a1
+ 388 000e 93840400 		addi	s1,s1,%lo(.LANCHOR1)
+ 389              	.LBB5:
+ 390              		.loc 1 95 5
+ 391 0012 9DC5     		beq	a1,zero,.L16
+ 392 0014 B7070000 		lui	a5,%hi(.LANCHOR1)
+GAS LISTING /tmp/ccuIdrr6.s 			page 11
+
+
+ 393 0018 B306B500 		add	a3,a0,a1
+ 394 001c 93840700 		addi	s1,a5,%lo(.LANCHOR1)
+ 395 0020 FD16     		addi	a3,a3,-1
+ 396 0022 93870700 		addi	a5,a5,%lo(.LANCHOR1)
+ 397 0026 13060540 		addi	a2,a0,1024
+ 398 002a 21A0     		j	.L17
+ 399              	.LVL35:
+ 400              	.L23:
+ 401 002c 0505     		addi	a0,a0,1
+ 402              	.LVL36:
+ 403              		.loc 1 95 29 discriminator 3
+ 404 002e 6309C500 		beq	a0,a2,.L16
+ 405              	.LVL37:
+ 406              	.L17:
+  96:liobt.c       ****         tx_dma_buffer[i] = message[i];
+ 407              		.loc 1 96 9 is_stmt 1 discriminator 4
+ 408              		.loc 1 96 35 is_stmt 0 discriminator 4
+ 409 0032 03470500 		lbu	a4,0(a0)
+ 410 0036 8507     		addi	a5,a5,1
+ 411              		.loc 1 96 26 discriminator 4
+ 412 0038 A38FE7FE 		sb	a4,-1(a5)
+ 413              	.LVL38:
+  95:liobt.c       ****     for(int i = 0; i < size && i < LIO_BT_BUFFER_SIZE; i++) {
+ 414              		.loc 1 95 5 discriminator 4
+ 415 003c E318D5FE 		bne	a0,a3,.L23
+ 416              	.LVL39:
+ 417              	.L16:
+ 418              	.LBE5:
+  97:liobt.c       ****     }
+  98:liobt.c       **** 
+  99:liobt.c       ****     dma_parameter_struct dma_init_struct;
+ 419              		.loc 1 99 5 is_stmt 1
+ 100:liobt.c       ****     dma_deinit(DMA0, DMA_CH3);
+ 420              		.loc 1 100 5
+ 421 0040 8D45     		li	a1,3
+ 422              	.LVL40:
+ 423 0042 37050240 		li	a0,1073872896
+ 424 0046 97000000 		call	dma_deinit
+ 424      E7800000 
+ 425              	.LVL41:
+ 101:liobt.c       ****     dma_init_struct.direction = DMA_MEMORY_TO_PERIPHERAL;
+ 426              		.loc 1 101 5
+ 102:liobt.c       ****     dma_init_struct.memory_addr = (uint32_t)tx_dma_buffer;
+ 427              		.loc 1 102 5
+ 103:liobt.c       ****     dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 104:liobt.c       ****     dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 105:liobt.c       ****     dma_init_struct.number = size;
+ 106:liobt.c       ****     dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART0);
+ 428              		.loc 1 106 33 is_stmt 0
+ 429 004e B7470140 		li	a5,1073823744
+ 430 0052 93874780 		addi	a5,a5,-2044
+ 431 0056 3EC2     		sw	a5,4(sp)
+ 107:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 108:liobt.c       ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 109:liobt.c       ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 432              		.loc 1 109 30
+ 433 0058 8D67     		li	a5,12288
+GAS LISTING /tmp/ccuIdrr6.s 			page 12
+
+
+ 434 005a 3ECC     		sw	a5,24(sp)
+ 107:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 435              		.loc 1 107 32
+ 436 005c 93070010 		li	a5,256
+ 110:liobt.c       ****     dma_init(DMA0, DMA_CH3, &dma_init_struct);
+ 437              		.loc 1 110 5
+ 438 0060 5000     		addi	a2,sp,4
+ 107:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 439              		.loc 1 107 32
+ 440 0062 231EF100 		sh	a5,28(sp)
+ 441              		.loc 1 110 5
+ 442 0066 8D45     		li	a1,3
+ 101:liobt.c       ****     dma_init_struct.memory_addr = (uint32_t)tx_dma_buffer;
+ 443              		.loc 1 101 31
+ 444 0068 8547     		li	a5,1
+ 445              		.loc 1 110 5
+ 446 006a 37050240 		li	a0,1073872896
+ 101:liobt.c       ****     dma_init_struct.memory_addr = (uint32_t)tx_dma_buffer;
+ 447              		.loc 1 101 31
+ 448 006e 230FF100 		sb	a5,30(sp)
+ 102:liobt.c       ****     dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 449              		.loc 1 102 33
+ 450 0072 26C6     		sw	s1,12(sp)
+ 103:liobt.c       ****     dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 451              		.loc 1 103 5 is_stmt 1
+ 104:liobt.c       ****     dma_init_struct.number = size;
+ 452              		.loc 1 104 5
+ 105:liobt.c       ****     dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART0);
+ 453              		.loc 1 105 28 is_stmt 0
+ 454 0074 22CA     		sw	s0,20(sp)
+ 104:liobt.c       ****     dma_init_struct.number = size;
+ 455              		.loc 1 104 34
+ 456 0076 02C8     		sw	zero,16(sp)
+ 105:liobt.c       ****     dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART0);
+ 457              		.loc 1 105 5 is_stmt 1
+ 106:liobt.c       ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 458              		.loc 1 106 5
+ 107:liobt.c       ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 459              		.loc 1 107 5
+ 108:liobt.c       ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 460              		.loc 1 108 5
+ 108:liobt.c       ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 461              		.loc 1 108 34 is_stmt 0
+ 462 0078 02C4     		sw	zero,8(sp)
+ 109:liobt.c       ****     dma_init(DMA0, DMA_CH3, &dma_init_struct);
+ 463              		.loc 1 109 5 is_stmt 1
+ 464              		.loc 1 110 5
+ 465 007a 97000000 		call	dma_init
+ 465      E7800000 
+ 466              	.LVL42:
+ 111:liobt.c       ****     /* configure DMA mode */
+ 112:liobt.c       ****     dma_circulation_disable(DMA0, DMA_CH3);
+ 467              		.loc 1 112 5
+ 468 0082 8D45     		li	a1,3
+ 469 0084 37050240 		li	a0,1073872896
+ 470 0088 97000000 		call	dma_circulation_disable
+ 470      E7800000 
+GAS LISTING /tmp/ccuIdrr6.s 			page 13
+
+
+ 471              	.LVL43:
+ 113:liobt.c       ****     /* enable DMA channel3 */
+ 114:liobt.c       ****     dma_channel_enable(DMA0, DMA_CH3);
+ 472              		.loc 1 114 5
+ 473 0090 37050240 		li	a0,1073872896
+ 474 0094 8D45     		li	a1,3
+ 475 0096 97000000 		call	dma_channel_enable
+ 475      E7800000 
+ 476              	.LVL44:
+ 115:liobt.c       **** }
+ 477              		.loc 1 115 1 is_stmt 0
+ 478 009e B250     		lw	ra,44(sp)
+ 479              		.cfi_restore 1
+ 480 00a0 2254     		lw	s0,40(sp)
+ 481              		.cfi_restore 8
+ 482              	.LVL45:
+ 483 00a2 9254     		lw	s1,36(sp)
+ 484              		.cfi_restore 9
+ 485 00a4 4561     		addi	sp,sp,48
+ 486              	.LCFI8:
+ 487              		.cfi_def_cfa_offset 0
+ 488 00a6 8280     		jr	ra
+ 489              		.cfi_endproc
+ 490              	.LFE4:
+ 492              		.globl	tx_dma_buffer
+ 493              		.globl	rx_dma_buffer
+ 494              		.section	.bss.rx_dma_buffer,"aw",@nobits
+ 495              		.align	2
+ 496              		.set	.LANCHOR0,. + 0
+ 499              	rx_dma_buffer:
+ 500 0000 00000000 		.zero	1024
+ 500      00000000 
+ 500      00000000 
+ 500      00000000 
+ 500      00000000 
+ 501              		.section	.bss.tx_dma_buffer,"aw",@nobits
+ 502              		.align	2
+ 503              		.set	.LANCHOR1,. + 0
+ 506              	tx_dma_buffer:
+ 507 0000 00000000 		.zero	1024
+ 507      00000000 
+ 507      00000000 
+ 507      00000000 
+ 507      00000000 
+ 508              		.text
+ 509              	.Letext0:
+ 510              		.file 2 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/m
+ 511              		.file 3 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/s
+ 512              		.file 4 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_dma.h"
+ 513              		.file 5 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rcu.h"
+ 514              		.file 6 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/lib/gcc/riscv64-unknown-elf/8
+ 515              		.file 7 "../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+ 516              		.file 8 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_gpio.h"
+ 517              		.file 9 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_usart.h"
+GAS LISTING /tmp/ccuIdrr6.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 liobt.c
+     /tmp/ccuIdrr6.s:13     .text.lio_init_bt:0000000000000000 lio_init_bt
+     /tmp/ccuIdrr6.s:17     .text.lio_init_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:18     .text.lio_init_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:19     .text.lio_init_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:20     .text.lio_init_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:21     .text.lio_init_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:23     .text.lio_init_bt:0000000000000002 .L0 
+     /tmp/ccuIdrr6.s:25     .text.lio_init_bt:0000000000000002 .L0 
+     /tmp/ccuIdrr6.s:27     .text.lio_init_bt:0000000000000006 .L0 
+     /tmp/ccuIdrr6.s:29     .text.lio_init_bt:000000000000000a .L0 
+     /tmp/ccuIdrr6.s:30     .text.lio_init_bt:000000000000000a .L0 
+     /tmp/ccuIdrr6.s:32     .text.lio_init_bt:000000000000000a .L0 
+     /tmp/ccuIdrr6.s:35     .text.lio_init_bt:0000000000000012 .L0 
+     /tmp/ccuIdrr6.s:39     .text.lio_init_bt:000000000000001e .L0 
+     /tmp/ccuIdrr6.s:43     .text.lio_init_bt:000000000000002a .L0 
+     /tmp/ccuIdrr6.s:51     .text.lio_init_bt:0000000000000042 .L0 
+     /tmp/ccuIdrr6.s:58     .text.lio_init_bt:0000000000000056 .L0 
+     /tmp/ccuIdrr6.s:63     .text.lio_init_bt:0000000000000066 .L0 
+     /tmp/ccuIdrr6.s:69     .text.lio_init_bt:0000000000000078 .L0 
+     /tmp/ccuIdrr6.s:74     .text.lio_init_bt:0000000000000086 .L0 
+     /tmp/ccuIdrr6.s:79     .text.lio_init_bt:0000000000000094 .L0 
+     /tmp/ccuIdrr6.s:84     .text.lio_init_bt:00000000000000a2 .L0 
+     /tmp/ccuIdrr6.s:89     .text.lio_init_bt:00000000000000b0 .L0 
+     /tmp/ccuIdrr6.s:94     .text.lio_init_bt:00000000000000be .L0 
+     /tmp/ccuIdrr6.s:99     .text.lio_init_bt:00000000000000cc .L0 
+     /tmp/ccuIdrr6.s:104    .text.lio_init_bt:00000000000000da .L0 
+     /tmp/ccuIdrr6.s:108    .text.lio_init_bt:00000000000000e6 .L0 
+     /tmp/ccuIdrr6.s:113    .text.lio_init_bt:00000000000000f6 .L0 
+     /tmp/ccuIdrr6.s:118    .text.lio_init_bt:0000000000000106 .L0 
+     /tmp/ccuIdrr6.s:123    .text.lio_init_bt:0000000000000114 .L0 
+     /tmp/ccuIdrr6.s:124    .text.lio_init_bt:0000000000000114 .L0 
+     /tmp/ccuIdrr6.s:125    .text.lio_init_bt:0000000000000114 .L0 
+     /tmp/ccuIdrr6.s:129    .text.lio_init_bt:000000000000011e .L0 
+     /tmp/ccuIdrr6.s:130    .text.lio_init_bt:000000000000011e .L0 
+     /tmp/ccuIdrr6.s:131    .text.lio_init_bt:000000000000011e .L0 
+     /tmp/ccuIdrr6.s:132    .text.lio_init_bt:000000000000011e .L0 
+     /tmp/ccuIdrr6.s:133    .text.lio_init_bt:000000000000011e .L0 
+     /tmp/ccuIdrr6.s:136    .text.lio_init_bt:0000000000000124 .L0 
+     /tmp/ccuIdrr6.s:138    .text.lio_init_bt:0000000000000126 .L0 
+     /tmp/ccuIdrr6.s:140    .text.lio_init_bt:0000000000000128 .L0 
+     /tmp/ccuIdrr6.s:142    .text.lio_init_bt:000000000000012a .L0 
+     /tmp/ccuIdrr6.s:144    .text.lio_init_bt:000000000000012c .L0 
+     /tmp/ccuIdrr6.s:146    .text.lio_init_bt:0000000000000130 .L0 
+     /tmp/ccuIdrr6.s:148    .text.lio_init_bt:0000000000000134 .L0 
+     /tmp/ccuIdrr6.s:150    .text.lio_init_bt:0000000000000138 .L0 
+     /tmp/ccuIdrr6.s:152    .text.lio_init_bt:000000000000013c .L0 
+     /tmp/ccuIdrr6.s:154    .text.lio_init_bt:000000000000013e .L0 
+     /tmp/ccuIdrr6.s:155    .text.lio_init_bt:000000000000013e .L0 
+     /tmp/ccuIdrr6.s:156    .text.lio_init_bt:000000000000013e .L0 
+     /tmp/ccuIdrr6.s:158    .text.lio_init_bt:0000000000000140 .L0 
+     /tmp/ccuIdrr6.s:159    .text.lio_init_bt:0000000000000140 .L0 
+     /tmp/ccuIdrr6.s:161    .text.lio_init_bt:0000000000000142 .L0 
+     /tmp/ccuIdrr6.s:163    .text.lio_init_bt:0000000000000146 .L0 
+     /tmp/ccuIdrr6.s:166    .text.lio_init_bt:000000000000014e .L0 
+     /tmp/ccuIdrr6.s:171    .text.lio_init_bt:000000000000015c .L0 
+GAS LISTING /tmp/ccuIdrr6.s 			page 15
+
+
+     /tmp/ccuIdrr6.s:176    .text.lio_init_bt:000000000000016a .L0 
+     /tmp/ccuIdrr6.s:177    .text.lio_init_bt:000000000000016c .L0 
+     /tmp/ccuIdrr6.s:179    .text.lio_init_bt:000000000000016e .L0 
+     /tmp/ccuIdrr6.s:182    .text.lio_init_bt:0000000000000170 .L0 
+     /tmp/ccuIdrr6.s:184    .text.lio_init_bt:0000000000000172 .L0 
+     /tmp/ccuIdrr6.s:191    .text.lio_read_bt:0000000000000000 lio_read_bt
+     /tmp/ccuIdrr6.s:194    .text.lio_read_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:196    .text.lio_read_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:197    .text.lio_read_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:198    .text.lio_read_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:200    .text.lio_read_bt:0000000000000002 .L0 
+     /tmp/ccuIdrr6.s:202    .text.lio_read_bt:0000000000000002 .L0 
+     /tmp/ccuIdrr6.s:204    .text.lio_read_bt:0000000000000006 .L0 
+     /tmp/ccuIdrr6.s:205    .text.lio_read_bt:0000000000000008 .L0 
+     /tmp/ccuIdrr6.s:207    .text.lio_read_bt:0000000000000008 .L0 
+     /tmp/ccuIdrr6.s:210    .text.lio_read_bt:0000000000000010 .L0 
+     /tmp/ccuIdrr6.s:212    .text.lio_read_bt:0000000000000014 .L0 
+     /tmp/ccuIdrr6.s:213    .text.lio_read_bt:0000000000000014 .L0 
+     /tmp/ccuIdrr6.s:215    .text.lio_read_bt:0000000000000014 .L0 
+     /tmp/ccuIdrr6.s:217    .text.lio_read_bt:0000000000000016 .L0 
+     /tmp/ccuIdrr6.s:219    .text.lio_read_bt:0000000000000018 .L0 
+     /tmp/ccuIdrr6.s:222    .text.lio_read_bt:000000000000001c .L0 
+     /tmp/ccuIdrr6.s:223    .text.lio_read_bt:000000000000001c .L0 
+     /tmp/ccuIdrr6.s:225    .text.lio_read_bt:000000000000001e .L0 
+     /tmp/ccuIdrr6.s:227    .text.lio_read_bt:0000000000000020 .L0 
+     /tmp/ccuIdrr6.s:230    .text.lio_read_bt:0000000000000022 .L0 
+     /tmp/ccuIdrr6.s:235    .text.lio_read_bt:0000000000000024 .L0 
+     /tmp/ccuIdrr6.s:240    .text.lio_read_bt:0000000000000028 .L0 
+     /tmp/ccuIdrr6.s:243    .text.lio_read_bt:000000000000002c .L0 
+     /tmp/ccuIdrr6.s:245    .text.lio_read_bt:000000000000002e .L0 
+     /tmp/ccuIdrr6.s:249    .text.lio_read_bt:0000000000000032 .L0 
+     /tmp/ccuIdrr6.s:252    .text.lio_read_bt:0000000000000036 .L0 
+     /tmp/ccuIdrr6.s:255    .text.lio_read_bt:0000000000000038 .L0 
+     /tmp/ccuIdrr6.s:257    .text.lio_read_bt:000000000000003c .L0 
+     /tmp/ccuIdrr6.s:259    .text.lio_read_bt:0000000000000040 .L0 
+     /tmp/ccuIdrr6.s:260    .text.lio_read_bt:0000000000000040 .L0 
+     /tmp/ccuIdrr6.s:262    .text.lio_read_bt:0000000000000044 .L0 
+     /tmp/ccuIdrr6.s:264    .text.lio_read_bt:0000000000000048 .L0 
+     /tmp/ccuIdrr6.s:268    .text.lio_read_bt:0000000000000052 .L0 
+     /tmp/ccuIdrr6.s:273    .text.lio_read_bt:000000000000005a .L0 
+     /tmp/ccuIdrr6.s:274    .text.lio_read_bt:000000000000005a .L0 
+     /tmp/ccuIdrr6.s:276    .text.lio_read_bt:000000000000005e .L0 
+     /tmp/ccuIdrr6.s:277    .text.lio_read_bt:000000000000005e .L0 
+     /tmp/ccuIdrr6.s:284    .text.lio_read_bt:000000000000006c .L0 
+     /tmp/ccuIdrr6.s:285    .text.lio_read_bt:000000000000006c .L0 
+     /tmp/ccuIdrr6.s:286    .text.lio_read_bt:000000000000006c .L0 
+     /tmp/ccuIdrr6.s:290    .text.lio_read_bt:0000000000000076 .L0 
+     /tmp/ccuIdrr6.s:293    .text.lio_read_bt:000000000000007c .L0 
+     /tmp/ccuIdrr6.s:295    .text.lio_read_bt:000000000000007e .L0 
+     /tmp/ccuIdrr6.s:297    .text.lio_read_bt:0000000000000080 .L0 
+     /tmp/ccuIdrr6.s:299    .text.lio_read_bt:0000000000000082 .L0 
+     /tmp/ccuIdrr6.s:301    .text.lio_read_bt:0000000000000084 .L0 
+     /tmp/ccuIdrr6.s:303    .text.lio_read_bt:0000000000000088 .L0 
+     /tmp/ccuIdrr6.s:305    .text.lio_read_bt:000000000000008c .L0 
+     /tmp/ccuIdrr6.s:307    .text.lio_read_bt:0000000000000090 .L0 
+     /tmp/ccuIdrr6.s:309    .text.lio_read_bt:0000000000000092 .L0 
+     /tmp/ccuIdrr6.s:310    .text.lio_read_bt:0000000000000092 .L0 
+GAS LISTING /tmp/ccuIdrr6.s 			page 16
+
+
+     /tmp/ccuIdrr6.s:311    .text.lio_read_bt:0000000000000092 .L0 
+     /tmp/ccuIdrr6.s:312    .text.lio_read_bt:0000000000000092 .L0 
+     /tmp/ccuIdrr6.s:313    .text.lio_read_bt:0000000000000092 .L0 
+     /tmp/ccuIdrr6.s:314    .text.lio_read_bt:0000000000000092 .L0 
+     /tmp/ccuIdrr6.s:315    .text.lio_read_bt:0000000000000092 .L0 
+     /tmp/ccuIdrr6.s:317    .text.lio_read_bt:0000000000000094 .L0 
+     /tmp/ccuIdrr6.s:318    .text.lio_read_bt:0000000000000094 .L0 
+     /tmp/ccuIdrr6.s:320    .text.lio_read_bt:0000000000000096 .L0 
+     /tmp/ccuIdrr6.s:322    .text.lio_read_bt:000000000000009a .L0 
+     /tmp/ccuIdrr6.s:325    .text.lio_read_bt:00000000000000a2 .L0 
+     /tmp/ccuIdrr6.s:330    .text.lio_read_bt:00000000000000b0 .L0 
+     /tmp/ccuIdrr6.s:336    .text.lio_read_bt:00000000000000be .L0 
+     /tmp/ccuIdrr6.s:337    .text.lio_read_bt:00000000000000be .L0 
+     /tmp/ccuIdrr6.s:339    .text.lio_read_bt:00000000000000c2 .L0 
+     /tmp/ccuIdrr6.s:340    .text.lio_read_bt:00000000000000c2 .L0 
+     /tmp/ccuIdrr6.s:342    .text.lio_read_bt:00000000000000c4 .L0 
+     /tmp/ccuIdrr6.s:344    .text.lio_read_bt:00000000000000c6 .L0 
+     /tmp/ccuIdrr6.s:347    .text.lio_read_bt:00000000000000c8 .L0 
+     /tmp/ccuIdrr6.s:352    .text.lio_read_bt:00000000000000ca .L0 
+     /tmp/ccuIdrr6.s:356    .text.lio_read_bt:00000000000000ce .L0 
+     /tmp/ccuIdrr6.s:359    .text.lio_read_bt:00000000000000d4 .L0 
+     /tmp/ccuIdrr6.s:366    .text.lio_send_bt:0000000000000000 lio_send_bt
+     /tmp/ccuIdrr6.s:369    .text.lio_send_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:371    .text.lio_send_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:373    .text.lio_send_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:375    .text.lio_send_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:376    .text.lio_send_bt:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:378    .text.lio_send_bt:0000000000000002 .L0 
+     /tmp/ccuIdrr6.s:382    .text.lio_send_bt:0000000000000008 .L0 
+     /tmp/ccuIdrr6.s:383    .text.lio_send_bt:0000000000000008 .L0 
+     /tmp/ccuIdrr6.s:384    .text.lio_send_bt:0000000000000008 .L0 
+     /tmp/ccuIdrr6.s:387    .text.lio_send_bt:000000000000000c .L0 
+     /tmp/ccuIdrr6.s:391    .text.lio_send_bt:0000000000000012 .L0 
+     /tmp/ccuIdrr6.s:404    .text.lio_send_bt:000000000000002e .L0 
+     /tmp/ccuIdrr6.s:408    .text.lio_send_bt:0000000000000032 .L0 
+     /tmp/ccuIdrr6.s:409    .text.lio_send_bt:0000000000000032 .L0 
+     /tmp/ccuIdrr6.s:412    .text.lio_send_bt:0000000000000038 .L0 
+     /tmp/ccuIdrr6.s:415    .text.lio_send_bt:000000000000003c .L0 
+     /tmp/ccuIdrr6.s:420    .text.lio_send_bt:0000000000000040 .L0 
+     /tmp/ccuIdrr6.s:421    .text.lio_send_bt:0000000000000040 .L0 
+     /tmp/ccuIdrr6.s:427    .text.lio_send_bt:000000000000004e .L0 
+     /tmp/ccuIdrr6.s:428    .text.lio_send_bt:000000000000004e .L0 
+     /tmp/ccuIdrr6.s:429    .text.lio_send_bt:000000000000004e .L0 
+     /tmp/ccuIdrr6.s:433    .text.lio_send_bt:0000000000000058 .L0 
+     /tmp/ccuIdrr6.s:436    .text.lio_send_bt:000000000000005c .L0 
+     /tmp/ccuIdrr6.s:438    .text.lio_send_bt:0000000000000060 .L0 
+     /tmp/ccuIdrr6.s:440    .text.lio_send_bt:0000000000000062 .L0 
+     /tmp/ccuIdrr6.s:442    .text.lio_send_bt:0000000000000066 .L0 
+     /tmp/ccuIdrr6.s:444    .text.lio_send_bt:0000000000000068 .L0 
+     /tmp/ccuIdrr6.s:446    .text.lio_send_bt:000000000000006a .L0 
+     /tmp/ccuIdrr6.s:448    .text.lio_send_bt:000000000000006e .L0 
+     /tmp/ccuIdrr6.s:450    .text.lio_send_bt:0000000000000072 .L0 
+     /tmp/ccuIdrr6.s:452    .text.lio_send_bt:0000000000000074 .L0 
+     /tmp/ccuIdrr6.s:453    .text.lio_send_bt:0000000000000074 .L0 
+     /tmp/ccuIdrr6.s:454    .text.lio_send_bt:0000000000000074 .L0 
+     /tmp/ccuIdrr6.s:456    .text.lio_send_bt:0000000000000076 .L0 
+     /tmp/ccuIdrr6.s:458    .text.lio_send_bt:0000000000000078 .L0 
+GAS LISTING /tmp/ccuIdrr6.s 			page 17
+
+
+     /tmp/ccuIdrr6.s:459    .text.lio_send_bt:0000000000000078 .L0 
+     /tmp/ccuIdrr6.s:460    .text.lio_send_bt:0000000000000078 .L0 
+     /tmp/ccuIdrr6.s:461    .text.lio_send_bt:0000000000000078 .L0 
+     /tmp/ccuIdrr6.s:462    .text.lio_send_bt:0000000000000078 .L0 
+     /tmp/ccuIdrr6.s:464    .text.lio_send_bt:000000000000007a .L0 
+     /tmp/ccuIdrr6.s:465    .text.lio_send_bt:000000000000007a .L0 
+     /tmp/ccuIdrr6.s:468    .text.lio_send_bt:0000000000000082 .L0 
+     /tmp/ccuIdrr6.s:473    .text.lio_send_bt:0000000000000090 .L0 
+     /tmp/ccuIdrr6.s:478    .text.lio_send_bt:000000000000009e .L0 
+     /tmp/ccuIdrr6.s:479    .text.lio_send_bt:00000000000000a0 .L0 
+     /tmp/ccuIdrr6.s:481    .text.lio_send_bt:00000000000000a2 .L0 
+     /tmp/ccuIdrr6.s:484    .text.lio_send_bt:00000000000000a4 .L0 
+     /tmp/ccuIdrr6.s:487    .text.lio_send_bt:00000000000000a6 .L0 
+     /tmp/ccuIdrr6.s:489    .text.lio_send_bt:00000000000000a8 .L0 
+     /tmp/ccuIdrr6.s:506    .bss.tx_dma_buffer:0000000000000000 tx_dma_buffer
+     /tmp/ccuIdrr6.s:499    .bss.rx_dma_buffer:0000000000000000 rx_dma_buffer
+     /tmp/ccuIdrr6.s:496    .bss.rx_dma_buffer:0000000000000000 .LANCHOR0
+     /tmp/ccuIdrr6.s:503    .bss.tx_dma_buffer:0000000000000000 .LANCHOR1
+     /tmp/ccuIdrr6.s:187    .text.lio_init_bt:0000000000000172 .L0 
+     /tmp/ccuIdrr6.s:362    .text.lio_read_bt:00000000000000d4 .L0 
+     /tmp/ccuIdrr6.s:494    .text.lio_send_bt:00000000000000a8 .L0 
+                     .debug_frame:0000000000000000 .L0 
+     /tmp/ccuIdrr6.s:233    .text.lio_read_bt:0000000000000024 .L13
+     /tmp/ccuIdrr6.s:271    .text.lio_read_bt:000000000000005a .L8
+     /tmp/ccuIdrr6.s:350    .text.lio_read_bt:00000000000000ca .L14
+     /tmp/ccuIdrr6.s:247    .text.lio_read_bt:0000000000000032 .L9
+     /tmp/ccuIdrr6.s:417    .text.lio_send_bt:0000000000000040 .L16
+     /tmp/ccuIdrr6.s:406    .text.lio_send_bt:0000000000000032 .L17
+     /tmp/ccuIdrr6.s:400    .text.lio_send_bt:000000000000002c .L23
+     /tmp/ccuIdrr6.s:1636   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccuIdrr6.s:2407   .debug_str:00000000000002d3 .LASF97
+     /tmp/ccuIdrr6.s:2487   .debug_str:0000000000000549 .LASF98
+     /tmp/ccuIdrr6.s:2469   .debug_str:00000000000004a4 .LASF99
+     /tmp/ccuIdrr6.s:2269   .debug_ranges:0000000000000000 .Ldebug_ranges0
+     /tmp/ccuIdrr6.s:2291   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccuIdrr6.s:2411   .debug_str:0000000000000356 .LASF0
+     /tmp/ccuIdrr6.s:2403   .debug_str:00000000000002b0 .LASF1
+     /tmp/ccuIdrr6.s:2491   .debug_str:0000000000000559 .LASF6
+     /tmp/ccuIdrr6.s:2393   .debug_str:000000000000026f .LASF2
+     /tmp/ccuIdrr6.s:2329   .debug_str:00000000000000ec .LASF3
+     /tmp/ccuIdrr6.s:2423   .debug_str:00000000000003a7 .LASF4
+     /tmp/ccuIdrr6.s:2355   .debug_str:0000000000000180 .LASF5
+     /tmp/ccuIdrr6.s:2325   .debug_str:00000000000000d9 .LASF7
+     /tmp/ccuIdrr6.s:2413   .debug_str:0000000000000363 .LASF8
+     /tmp/ccuIdrr6.s:2323   .debug_str:00000000000000cb .LASF9
+     /tmp/ccuIdrr6.s:2405   .debug_str:00000000000002bc .LASF10
+     /tmp/ccuIdrr6.s:2333   .debug_str:0000000000000101 .LASF11
+     /tmp/ccuIdrr6.s:2409   .debug_str:000000000000034d .LASF12
+     /tmp/ccuIdrr6.s:2297   .debug_str:000000000000001f .LASF70
+     /tmp/ccuIdrr6.s:2477   .debug_str:0000000000000521 .LASF13
+     /tmp/ccuIdrr6.s:2479   .debug_str:0000000000000529 .LASF14
+     /tmp/ccuIdrr6.s:2481   .debug_str:0000000000000531 .LASF15
+     /tmp/ccuIdrr6.s:2483   .debug_str:0000000000000539 .LASF16
+     /tmp/ccuIdrr6.s:2485   .debug_str:0000000000000541 .LASF17
+     /tmp/ccuIdrr6.s:2337   .debug_str:0000000000000115 .LASF18
+     /tmp/ccuIdrr6.s:2489   .debug_str:0000000000000551 .LASF19
+     /tmp/ccuIdrr6.s:2319   .debug_str:00000000000000b5 .LASF20
+GAS LISTING /tmp/ccuIdrr6.s 			page 18
+
+
+     /tmp/ccuIdrr6.s:2383   .debug_str:0000000000000217 .LASF21
+     /tmp/ccuIdrr6.s:2345   .debug_str:000000000000013b .LASF22
+     /tmp/ccuIdrr6.s:2387   .debug_str:000000000000022e .LASF23
+     /tmp/ccuIdrr6.s:2471   .debug_str:00000000000004e8 .LASF24
+     /tmp/ccuIdrr6.s:2303   .debug_str:0000000000000043 .LASF25
+     /tmp/ccuIdrr6.s:2381   .debug_str:000000000000020c .LASF26
+     /tmp/ccuIdrr6.s:2331   .debug_str:00000000000000f6 .LASF27
+     /tmp/ccuIdrr6.s:2321   .debug_str:00000000000000c1 .LASF28
+     /tmp/ccuIdrr6.s:2389   .debug_str:000000000000023b .LASF29
+     /tmp/ccuIdrr6.s:2431   .debug_str:00000000000003d1 .LASF30
+     /tmp/ccuIdrr6.s:2433   .debug_str:00000000000003da .LASF31
+     /tmp/ccuIdrr6.s:2447   .debug_str:0000000000000424 .LASF32
+     /tmp/ccuIdrr6.s:2295   .debug_str:0000000000000016 .LASF33
+     /tmp/ccuIdrr6.s:2461   .debug_str:0000000000000468 .LASF34
+     /tmp/ccuIdrr6.s:2371   .debug_str:00000000000001d5 .LASF35
+     /tmp/ccuIdrr6.s:2373   .debug_str:00000000000001e0 .LASF36
+     /tmp/ccuIdrr6.s:2375   .debug_str:00000000000001eb .LASF37
+     /tmp/ccuIdrr6.s:2377   .debug_str:00000000000001f6 .LASF38
+     /tmp/ccuIdrr6.s:2379   .debug_str:0000000000000201 .LASF39
+     /tmp/ccuIdrr6.s:2363   .debug_str:00000000000001a4 .LASF40
+     /tmp/ccuIdrr6.s:2349   .debug_str:000000000000015d .LASF41
+     /tmp/ccuIdrr6.s:2359   .debug_str:0000000000000192 .LASF42
+     /tmp/ccuIdrr6.s:2361   .debug_str:000000000000019b .LASF43
+     /tmp/ccuIdrr6.s:2457   .debug_str:0000000000000452 .LASF44
+     /tmp/ccuIdrr6.s:2459   .debug_str:000000000000045d .LASF45
+     /tmp/ccuIdrr6.s:2463   .debug_str:0000000000000472 .LASF46
+     /tmp/ccuIdrr6.s:2417   .debug_str:000000000000038a .LASF47
+     /tmp/ccuIdrr6.s:2427   .debug_str:00000000000003bf .LASF48
+     /tmp/ccuIdrr6.s:2429   .debug_str:00000000000003c8 .LASF49
+     /tmp/ccuIdrr6.s:2339   .debug_str:000000000000011d .LASF50
+     /tmp/ccuIdrr6.s:2341   .debug_str:0000000000000126 .LASF51
+     /tmp/ccuIdrr6.s:2401   .debug_str:00000000000002a7 .LASF52
+     /tmp/ccuIdrr6.s:2421   .debug_str:000000000000039f .LASF53
+     /tmp/ccuIdrr6.s:2437   .debug_str:00000000000003f7 .LASF54
+     /tmp/ccuIdrr6.s:2327   .debug_str:00000000000000e4 .LASF55
+     /tmp/ccuIdrr6.s:2301   .debug_str:000000000000003c .LASF56
+     /tmp/ccuIdrr6.s:2441   .debug_str:0000000000000406 .LASF57
+     /tmp/ccuIdrr6.s:2309   .debug_str:000000000000007d .LASF58
+     /tmp/ccuIdrr6.s:2311   .debug_str:0000000000000087 .LASF59
+     /tmp/ccuIdrr6.s:2313   .debug_str:0000000000000091 .LASF60
+     /tmp/ccuIdrr6.s:2385   .debug_str:0000000000000224 .LASF61
+     /tmp/ccuIdrr6.s:2397   .debug_str:0000000000000295 .LASF62
+     /tmp/ccuIdrr6.s:2399   .debug_str:000000000000029e .LASF63
+     /tmp/ccuIdrr6.s:2369   .debug_str:00000000000001ca .LASF64
+     /tmp/ccuIdrr6.s:2357   .debug_str:0000000000000189 .LASF65
+     /tmp/ccuIdrr6.s:2419   .debug_str:0000000000000394 .LASF66
+     /tmp/ccuIdrr6.s:2317   .debug_str:00000000000000ae .LASF67
+     /tmp/ccuIdrr6.s:2343   .debug_str:000000000000012f .LASF68
+     /tmp/ccuIdrr6.s:2425   .debug_str:00000000000003ba .LASF69
+     /tmp/ccuIdrr6.s:2455   .debug_str:0000000000000444 .LASF71
+     /tmp/ccuIdrr6.s:2467   .debug_str:0000000000000496 .LASF72
+     /tmp/ccuIdrr6.s:2351   .debug_str:0000000000000167 .LASF76
+     /tmp/ccuIdrr6.s:367    .text.lio_send_bt:0000000000000000 .LFB4
+     /tmp/ccuIdrr6.s:490    .text.lio_send_bt:00000000000000a8 .LFE4
+     /tmp/ccuIdrr6.s:2039   .debug_loc:0000000000000000 .LLST5
+     /tmp/ccuIdrr6.s:2445   .debug_str:000000000000041c .LASF73
+     /tmp/ccuIdrr6.s:2057   .debug_loc:000000000000002c .LLST6
+GAS LISTING /tmp/ccuIdrr6.s 			page 19
+
+
+     /tmp/ccuIdrr6.s:2449   .debug_str:000000000000042c .LASF74
+     /tmp/ccuIdrr6.s:2077   .debug_loc:000000000000005b .LLST7
+     /tmp/ccuIdrr6.s:2367   .debug_str:00000000000001ba .LASF75
+     /tmp/ccuIdrr6.s:2095   .debug_loc:0000000000000087 .LLST8
+     /tmp/ccuIdrr6.s:425    .text.lio_send_bt:000000000000004e .LVL41
+     /tmp/ccuIdrr6.s:466    .text.lio_send_bt:0000000000000082 .LVL42
+     /tmp/ccuIdrr6.s:471    .text.lio_send_bt:0000000000000090 .LVL43
+     /tmp/ccuIdrr6.s:476    .text.lio_send_bt:000000000000009e .LVL44
+     /tmp/ccuIdrr6.s:2335   .debug_str:0000000000000109 .LASF77
+     /tmp/ccuIdrr6.s:192    .text.lio_read_bt:0000000000000000 .LFB3
+     /tmp/ccuIdrr6.s:360    .text.lio_read_bt:00000000000000d4 .LFE3
+     /tmp/ccuIdrr6.s:2136   .debug_loc:00000000000000d4 .LLST1
+     /tmp/ccuIdrr6.s:2439   .debug_str:00000000000003ff .LASF78
+     /tmp/ccuIdrr6.s:2169   .debug_loc:0000000000000124 .LLST2
+     /tmp/ccuIdrr6.s:2198   .debug_loc:0000000000000169 .LLST3
+     /tmp/ccuIdrr6.s:2218   .debug_loc:0000000000000197 .LLST4
+     /tmp/ccuIdrr6.s:282    .text.lio_read_bt:000000000000006c .LVL29
+     /tmp/ccuIdrr6.s:323    .text.lio_read_bt:00000000000000a2 .LVL30
+     /tmp/ccuIdrr6.s:328    .text.lio_read_bt:00000000000000b0 .LVL31
+     /tmp/ccuIdrr6.s:333    .text.lio_read_bt:00000000000000be .LVL32
+     /tmp/ccuIdrr6.s:2443   .debug_str:0000000000000410 .LASF100
+     /tmp/ccuIdrr6.s:14     .text.lio_init_bt:0000000000000000 .LFB2
+     /tmp/ccuIdrr6.s:185    .text.lio_init_bt:0000000000000172 .LFE2
+     /tmp/ccuIdrr6.s:2234   .debug_loc:00000000000001c1 .LLST0
+     /tmp/ccuIdrr6.s:33     .text.lio_init_bt:0000000000000012 .LVL0
+     /tmp/ccuIdrr6.s:37     .text.lio_init_bt:000000000000001e .LVL1
+     /tmp/ccuIdrr6.s:41     .text.lio_init_bt:000000000000002a .LVL2
+     /tmp/ccuIdrr6.s:49     .text.lio_init_bt:0000000000000042 .LVL3
+     /tmp/ccuIdrr6.s:56     .text.lio_init_bt:0000000000000056 .LVL4
+     /tmp/ccuIdrr6.s:61     .text.lio_init_bt:0000000000000066 .LVL5
+     /tmp/ccuIdrr6.s:67     .text.lio_init_bt:0000000000000078 .LVL6
+     /tmp/ccuIdrr6.s:72     .text.lio_init_bt:0000000000000086 .LVL7
+     /tmp/ccuIdrr6.s:77     .text.lio_init_bt:0000000000000094 .LVL8
+     /tmp/ccuIdrr6.s:82     .text.lio_init_bt:00000000000000a2 .LVL9
+     /tmp/ccuIdrr6.s:87     .text.lio_init_bt:00000000000000b0 .LVL10
+     /tmp/ccuIdrr6.s:92     .text.lio_init_bt:00000000000000be .LVL11
+     /tmp/ccuIdrr6.s:97     .text.lio_init_bt:00000000000000cc .LVL12
+     /tmp/ccuIdrr6.s:102    .text.lio_init_bt:00000000000000da .LVL13
+     /tmp/ccuIdrr6.s:106    .text.lio_init_bt:00000000000000e6 .LVL14
+     /tmp/ccuIdrr6.s:111    .text.lio_init_bt:00000000000000f6 .LVL15
+     /tmp/ccuIdrr6.s:116    .text.lio_init_bt:0000000000000106 .LVL16
+     /tmp/ccuIdrr6.s:121    .text.lio_init_bt:0000000000000114 .LVL17
+     /tmp/ccuIdrr6.s:164    .text.lio_init_bt:000000000000014e .LVL18
+     /tmp/ccuIdrr6.s:169    .text.lio_init_bt:000000000000015c .LVL19
+     /tmp/ccuIdrr6.s:174    .text.lio_init_bt:000000000000016a .LVL20
+     /tmp/ccuIdrr6.s:2365   .debug_str:00000000000001af .LASF79
+     /tmp/ccuIdrr6.s:2453   .debug_str:000000000000043b .LASF80
+     /tmp/ccuIdrr6.s:2305   .debug_str:000000000000004c .LASF81
+     /tmp/ccuIdrr6.s:2475   .debug_str:000000000000050e .LASF82
+     /tmp/ccuIdrr6.s:2395   .debug_str:000000000000027d .LASF83
+     /tmp/ccuIdrr6.s:2451   .debug_str:0000000000000431 .LASF84
+     /tmp/ccuIdrr6.s:2353   .debug_str:0000000000000173 .LASF85
+     /tmp/ccuIdrr6.s:2493   .debug_str:0000000000000563 .LASF86
+     /tmp/ccuIdrr6.s:2347   .debug_str:0000000000000147 .LASF87
+     /tmp/ccuIdrr6.s:2315   .debug_str:000000000000009b .LASF88
+     /tmp/ccuIdrr6.s:2435   .debug_str:00000000000003e3 .LASF89
+     /tmp/ccuIdrr6.s:2391   .debug_str:0000000000000250 .LASF90
+GAS LISTING /tmp/ccuIdrr6.s 			page 20
+
+
+     /tmp/ccuIdrr6.s:2473   .debug_str:00000000000004ef .LASF91
+     /tmp/ccuIdrr6.s:2415   .debug_str:0000000000000375 .LASF92
+     /tmp/ccuIdrr6.s:2293   .debug_str:0000000000000000 .LASF93
+     /tmp/ccuIdrr6.s:2299   .debug_str:000000000000002f .LASF94
+     /tmp/ccuIdrr6.s:2465   .debug_str:000000000000047c .LASF95
+     /tmp/ccuIdrr6.s:2307   .debug_str:0000000000000064 .LASF96
+     /tmp/ccuIdrr6.s:377    .text.lio_send_bt:0000000000000002 .LCFI7
+     /tmp/ccuIdrr6.s:486    .text.lio_send_bt:00000000000000a6 .LCFI8
+     /tmp/ccuIdrr6.s:370    .text.lio_send_bt:0000000000000000 .LVL34
+     /tmp/ccuIdrr6.s:399    .text.lio_send_bt:000000000000002c .LVL35
+     /tmp/ccuIdrr6.s:416    .text.lio_send_bt:0000000000000040 .LVL39
+     /tmp/ccuIdrr6.s:422    .text.lio_send_bt:0000000000000042 .LVL40
+     /tmp/ccuIdrr6.s:482    .text.lio_send_bt:00000000000000a2 .LVL45
+     /tmp/ccuIdrr6.s:402    .text.lio_send_bt:000000000000002e .LVL36
+     /tmp/ccuIdrr6.s:413    .text.lio_send_bt:000000000000003c .LVL38
+     /tmp/ccuIdrr6.s:199    .text.lio_read_bt:0000000000000002 .LCFI2
+     /tmp/ccuIdrr6.s:229    .text.lio_read_bt:0000000000000022 .LCFI3
+     /tmp/ccuIdrr6.s:234    .text.lio_read_bt:0000000000000024 .LCFI4
+     /tmp/ccuIdrr6.s:346    .text.lio_read_bt:00000000000000c8 .LCFI5
+     /tmp/ccuIdrr6.s:351    .text.lio_read_bt:00000000000000ca .LCFI6
+     /tmp/ccuIdrr6.s:195    .text.lio_read_bt:0000000000000000 .LVL21
+     /tmp/ccuIdrr6.s:220    .text.lio_read_bt:000000000000001a .LVL22
+     /tmp/ccuIdrr6.s:232    .text.lio_read_bt:0000000000000024 .LVL23
+     /tmp/ccuIdrr6.s:280    .text.lio_read_bt:0000000000000064 .LVL28
+     /tmp/ccuIdrr6.s:349    .text.lio_read_bt:00000000000000ca .LVL33
+     /tmp/ccuIdrr6.s:238    .text.lio_read_bt:0000000000000028 .LVL24
+     /tmp/ccuIdrr6.s:278    .text.lio_read_bt:0000000000000060 .LVL27
+     /tmp/ccuIdrr6.s:246    .text.lio_read_bt:0000000000000032 .LVL25
+     /tmp/ccuIdrr6.s:22     .text.lio_init_bt:0000000000000002 .LCFI0
+     /tmp/ccuIdrr6.s:181    .text.lio_init_bt:0000000000000170 .LCFI1
+     /tmp/ccuIdrr6.s:519    .debug_info:0000000000000000 .Ldebug_info0
+     /tmp/ccuIdrr6.s:241    .text.lio_read_bt:000000000000002c .LBB2
+     /tmp/ccuIdrr6.s:335    .text.lio_read_bt:00000000000000be .LBE2
+     /tmp/ccuIdrr6.s:354    .text.lio_read_bt:00000000000000ce .LBB3
+     /tmp/ccuIdrr6.s:358    .text.lio_read_bt:00000000000000d4 .LBE3
+     /tmp/ccuIdrr6.s:372    .text.lio_send_bt:0000000000000000 .LBB4
+     /tmp/ccuIdrr6.s:374    .text.lio_send_bt:0000000000000000 .LBE4
+     /tmp/ccuIdrr6.s:389    .text.lio_send_bt:0000000000000012 .LBB5
+     /tmp/ccuIdrr6.s:418    .text.lio_send_bt:0000000000000040 .LBE5
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_init
+usart_deinit
+usart_baudrate_set
+usart_word_length_set
+usart_stop_bit_set
+usart_parity_config
+usart_hardware_flow_rts_config
+usart_hardware_flow_cts_config
+usart_receive_config
+usart_transmit_config
+usart_enable
+usart_dma_transmit_config
+usart_dma_receive_config
+dma_deinit
+dma_init
+GAS LISTING /tmp/ccuIdrr6.s 			page 21
+
+
+dma_circulation_disable
+dma_channel_enable

@@ -1,0 +1,360 @@
+GAS LISTING /tmp/ccTBUrUW.s 			page 1
+
+
+   1              		.file	"handlers.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.handle_nmi,"ax",@progbits
+  10              		.align	1
+  11              		.weak	handle_nmi
+  13              	handle_nmi:
+  14              	.LFB5:
+  15              		.file 1 "../../firmware/RISCV/env_Eclipse/handlers.c"
+   1:../../firmware/RISCV/env_Eclipse/handlers.c **** //See LICENSE for license details.
+   2:../../firmware/RISCV/env_Eclipse/handlers.c **** #include <stdint.h>
+   3:../../firmware/RISCV/env_Eclipse/handlers.c **** #include <stdio.h>
+   4:../../firmware/RISCV/env_Eclipse/handlers.c **** #include <unistd.h>
+   5:../../firmware/RISCV/env_Eclipse/handlers.c **** #include "riscv_encoding.h"
+   6:../../firmware/RISCV/env_Eclipse/handlers.c **** #include "n200_func.h"
+   7:../../firmware/RISCV/env_Eclipse/handlers.c **** 
+   8:../../firmware/RISCV/env_Eclipse/handlers.c **** __attribute__((weak)) uintptr_t handle_nmi()
+   9:../../firmware/RISCV/env_Eclipse/handlers.c **** {
+  16              		.loc 1 9 1
+  17              		.cfi_startproc
+  10:../../firmware/RISCV/env_Eclipse/handlers.c ****   write(1, "nmi\n", 5);
+  18              		.loc 1 10 3
+  19 0000 B7050000 		lui	a1,%hi(.LC0)
+   9:../../firmware/RISCV/env_Eclipse/handlers.c ****   write(1, "nmi\n", 5);
+  20              		.loc 1 9 1 is_stmt 0
+  21 0004 4111     		addi	sp,sp,-16
+  22              	.LCFI0:
+  23              		.cfi_def_cfa_offset 16
+  24              		.loc 1 10 3
+  25 0006 1546     		li	a2,5
+  26 0008 93850500 		addi	a1,a1,%lo(.LC0)
+  27 000c 0545     		li	a0,1
+   9:../../firmware/RISCV/env_Eclipse/handlers.c ****   write(1, "nmi\n", 5);
+  28              		.loc 1 9 1
+  29 000e 06C6     		sw	ra,12(sp)
+  30              		.cfi_offset 1, -4
+  31              		.loc 1 10 3
+  32 0010 97000000 		call	write
+  32      E7800000 
+  33              	.LVL0:
+  11:../../firmware/RISCV/env_Eclipse/handlers.c ****   _exit(1);
+  34              		.loc 1 11 3 is_stmt 1
+  35 0018 0545     		li	a0,1
+  36 001a 97000000 		call	_exit
+  36      E7800000 
+  37              	.LVL1:
+  38              		.cfi_endproc
+  39              	.LFE5:
+  41              		.section	.text.handle_trap,"ax",@progbits
+  42              		.align	1
+  43              		.weak	handle_trap
+  45              	handle_trap:
+GAS LISTING /tmp/ccTBUrUW.s 			page 2
+
+
+  46              	.LFB6:
+  12:../../firmware/RISCV/env_Eclipse/handlers.c ****   return 0;
+  13:../../firmware/RISCV/env_Eclipse/handlers.c **** }
+  14:../../firmware/RISCV/env_Eclipse/handlers.c **** 
+  15:../../firmware/RISCV/env_Eclipse/handlers.c **** 
+  16:../../firmware/RISCV/env_Eclipse/handlers.c **** __attribute__((weak)) uintptr_t handle_trap(uintptr_t mcause, uintptr_t sp)
+  17:../../firmware/RISCV/env_Eclipse/handlers.c **** {
+  47              		.loc 1 17 1
+  48              		.cfi_startproc
+  49              	.LVL2:
+  18:../../firmware/RISCV/env_Eclipse/handlers.c ****   if((mcause & 0xFFF) == 0xFFF) {
+  50              		.loc 1 18 3
+  17:../../firmware/RISCV/env_Eclipse/handlers.c ****   if((mcause & 0xFFF) == 0xFFF) {
+  51              		.loc 1 17 1 is_stmt 0
+  52 0000 4111     		addi	sp,sp,-16
+  53              	.LCFI1:
+  54              		.cfi_def_cfa_offset 16
+  55              		.loc 1 18 14
+  56 0002 9347F5FF 		not	a5,a0
+  17:../../firmware/RISCV/env_Eclipse/handlers.c ****   if((mcause & 0xFFF) == 0xFFF) {
+  57              		.loc 1 17 1
+  58 0006 22C4     		sw	s0,8(sp)
+  59 0008 06C6     		sw	ra,12(sp)
+  60              		.cfi_offset 8, -8
+  61              		.cfi_offset 1, -4
+  62              		.loc 1 18 5
+  63 000a 13974701 		slli	a4,a5,20
+  17:../../firmware/RISCV/env_Eclipse/handlers.c ****   if((mcause & 0xFFF) == 0xFFF) {
+  64              		.loc 1 17 1
+  65 000e 2A84     		mv	s0,a0
+  66              		.loc 1 18 5
+  67 0010 05C3     		beq	a4,zero,.L7
+  68              	.LVL3:
+  69              	.L5:
+  19:../../firmware/RISCV/env_Eclipse/handlers.c ****       handle_nmi();
+  20:../../firmware/RISCV/env_Eclipse/handlers.c ****   }
+  21:../../firmware/RISCV/env_Eclipse/handlers.c ****   write(1, "trap\n", 5);
+  70              		.loc 1 21 3 is_stmt 1
+  71 0012 B7050000 		lui	a1,%hi(.LC1)
+  72 0016 1546     		li	a2,5
+  73 0018 93850500 		addi	a1,a1,%lo(.LC1)
+  74 001c 0545     		li	a0,1
+  75 001e 97000000 		call	write
+  75      E7800000 
+  76              	.LVL4:
+  22:../../firmware/RISCV/env_Eclipse/handlers.c ****   //printf("In trap handler, the mcause is %d\n", mcause);
+  23:../../firmware/RISCV/env_Eclipse/handlers.c ****   //printf("In trap handler, the mepc is 0x%x\n", read_csr(mepc));
+  24:../../firmware/RISCV/env_Eclipse/handlers.c ****   //printf("In trap handler, the mtval is 0x%x\n", read_csr(mbadaddr));
+  25:../../firmware/RISCV/env_Eclipse/handlers.c ****   _exit(mcause);
+  77              		.loc 1 25 3
+  78 0026 2285     		mv	a0,s0
+  79 0028 97000000 		call	_exit
+  79      E7800000 
+  80              	.LVL5:
+  81              	.L7:
+  19:../../firmware/RISCV/env_Eclipse/handlers.c ****       handle_nmi();
+  82              		.loc 1 19 7
+GAS LISTING /tmp/ccTBUrUW.s 			page 3
+
+
+  83 0030 97000000 		call	handle_nmi
+  83      E7800000 
+  84              	.LVL6:
+  85 0038 E9BF     		j	.L5
+  86              		.cfi_endproc
+  87              	.LFE6:
+  89              		.section	.rodata.handle_nmi.str1.4,"aMS",@progbits,1
+  90              		.align	2
+  91              	.LC0:
+  92 0000 6E6D690A 		.string	"nmi\n"
+  92      00
+  93              		.section	.rodata.handle_trap.str1.4,"aMS",@progbits,1
+  94              		.align	2
+  95              	.LC1:
+  96 0000 74726170 		.string	"trap\n"
+  96      0A00
+  97              		.text
+  98              	.Letext0:
+  99              		.file 2 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/m
+ 100              		.file 3 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/s
+ 101              		.file 4 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/lib/gcc/riscv64-unknown-elf/8
+ 102              		.file 5 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/s
+ 103              		.file 6 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/s
+ 104              		.file 7 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/s
+ 105              		.file 8 "/home/remahl/toolchain-gd32v/toolchain-gd32v-linux/compiler/riscv64-unknown-elf/include/s
+GAS LISTING /tmp/ccTBUrUW.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 handlers.c
+     /tmp/ccTBUrUW.s:13     .text.handle_nmi:0000000000000000 handle_nmi
+     /tmp/ccTBUrUW.s:17     .text.handle_nmi:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:18     .text.handle_nmi:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:19     .text.handle_nmi:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:21     .text.handle_nmi:0000000000000004 .L0 
+     /tmp/ccTBUrUW.s:23     .text.handle_nmi:0000000000000006 .L0 
+     /tmp/ccTBUrUW.s:25     .text.handle_nmi:0000000000000006 .L0 
+     /tmp/ccTBUrUW.s:29     .text.handle_nmi:000000000000000e .L0 
+     /tmp/ccTBUrUW.s:30     .text.handle_nmi:0000000000000010 .L0 
+     /tmp/ccTBUrUW.s:32     .text.handle_nmi:0000000000000010 .L0 
+     /tmp/ccTBUrUW.s:35     .text.handle_nmi:0000000000000018 .L0 
+     /tmp/ccTBUrUW.s:38     .text.handle_nmi:0000000000000022 .L0 
+     /tmp/ccTBUrUW.s:45     .text.handle_trap:0000000000000000 handle_trap
+     /tmp/ccTBUrUW.s:48     .text.handle_trap:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:50     .text.handle_trap:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:51     .text.handle_trap:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:52     .text.handle_trap:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:54     .text.handle_trap:0000000000000002 .L0 
+     /tmp/ccTBUrUW.s:56     .text.handle_trap:0000000000000002 .L0 
+     /tmp/ccTBUrUW.s:58     .text.handle_trap:0000000000000006 .L0 
+     /tmp/ccTBUrUW.s:60     .text.handle_trap:000000000000000a .L0 
+     /tmp/ccTBUrUW.s:61     .text.handle_trap:000000000000000a .L0 
+     /tmp/ccTBUrUW.s:63     .text.handle_trap:000000000000000a .L0 
+     /tmp/ccTBUrUW.s:65     .text.handle_trap:000000000000000e .L0 
+     /tmp/ccTBUrUW.s:67     .text.handle_trap:0000000000000010 .L0 
+     /tmp/ccTBUrUW.s:71     .text.handle_trap:0000000000000012 .L0 
+     /tmp/ccTBUrUW.s:78     .text.handle_trap:0000000000000026 .L0 
+     /tmp/ccTBUrUW.s:83     .text.handle_trap:0000000000000030 .L0 
+     /tmp/ccTBUrUW.s:86     .text.handle_trap:000000000000003a .L0 
+     /tmp/ccTBUrUW.s:41     .text.handle_nmi:0000000000000022 .L0 
+     /tmp/ccTBUrUW.s:89     .text.handle_trap:000000000000003a .L0 
+                     .debug_frame:0000000000000000 .L0 
+     /tmp/ccTBUrUW.s:91     .rodata.handle_nmi.str1.4:0000000000000000 .LC0
+     /tmp/ccTBUrUW.s:95     .rodata.handle_trap.str1.4:0000000000000000 .LC1
+     /tmp/ccTBUrUW.s:81     .text.handle_trap:0000000000000030 .L7
+     /tmp/ccTBUrUW.s:69     .text.handle_trap:0000000000000012 .L5
+     /tmp/ccTBUrUW.s:1680   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccTBUrUW.s:2470   .debug_str:0000000000000322 .LASF131
+     /tmp/ccTBUrUW.s:2396   .debug_str:00000000000001b5 .LASF132
+     /tmp/ccTBUrUW.s:2350   .debug_str:00000000000000a2 .LASF133
+     /tmp/ccTBUrUW.s:2312   .debug_ranges:0000000000000000 .Ldebug_ranges0
+     /tmp/ccTBUrUW.s:2320   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccTBUrUW.s:2358   .debug_str:0000000000000103 .LASF0
+     /tmp/ccTBUrUW.s:2484   .debug_str:00000000000003db .LASF1
+     /tmp/ccTBUrUW.s:2490   .debug_str:00000000000003f7 .LASF2
+     /tmp/ccTBUrUW.s:2432   .debug_str:0000000000000273 .LASF3
+     /tmp/ccTBUrUW.s:2376   .debug_str:0000000000000156 .LASF4
+     /tmp/ccTBUrUW.s:2424   .debug_str:000000000000024d .LASF5
+     /tmp/ccTBUrUW.s:2356   .debug_str:00000000000000f5 .LASF6
+     /tmp/ccTBUrUW.s:2342   .debug_str:0000000000000068 .LASF7
+     /tmp/ccTBUrUW.s:2504   .debug_str:0000000000000432 .LASF9
+     /tmp/ccTBUrUW.s:2416   .debug_str:0000000000000229 .LASF8
+     /tmp/ccTBUrUW.s:2326   .debug_str:0000000000000012 .LASF10
+     /tmp/ccTBUrUW.s:2464   .debug_str:0000000000000308 .LASF11
+     /tmp/ccTBUrUW.s:2446   .debug_str:00000000000002be .LASF12
+GAS LISTING /tmp/ccTBUrUW.s 			page 5
+
+
+     /tmp/ccTBUrUW.s:2478   .debug_str:00000000000003b8 .LASF13
+     /tmp/ccTBUrUW.s:2536   .debug_str:00000000000004ca .LASF14
+     /tmp/ccTBUrUW.s:2570   .debug_str:000000000000055f .LASF15
+     /tmp/ccTBUrUW.s:2442   .debug_str:00000000000002b0 .LASF16
+     /tmp/ccTBUrUW.s:2418   .debug_str:0000000000000236 .LASF17
+     /tmp/ccTBUrUW.s:2528   .debug_str:00000000000004a8 .LASF18
+     /tmp/ccTBUrUW.s:2530   .debug_str:00000000000004b0 .LASF19
+     /tmp/ccTBUrUW.s:2500   .debug_str:000000000000041f .LASF20
+     /tmp/ccTBUrUW.s:2556   .debug_str:0000000000000515 .LASF21
+     /tmp/ccTBUrUW.s:2482   .debug_str:00000000000003c9 .LASF22
+     /tmp/ccTBUrUW.s:2402   .debug_str:00000000000001ec .LASF23
+     /tmp/ccTBUrUW.s:2406   .debug_str:00000000000001fd .LASF28
+     /tmp/ccTBUrUW.s:2548   .debug_str:00000000000004f4 .LASF24
+     /tmp/ccTBUrUW.s:2520   .debug_str:000000000000048b .LASF25
+     /tmp/ccTBUrUW.s:2400   .debug_str:00000000000001e6 .LASF26
+     /tmp/ccTBUrUW.s:2564   .debug_str:000000000000054a .LASF27
+     /tmp/ccTBUrUW.s:2414   .debug_str:0000000000000224 .LASF29
+     /tmp/ccTBUrUW.s:2352   .debug_str:00000000000000e6 .LASF30
+     /tmp/ccTBUrUW.s:2542   .debug_str:00000000000004de .LASF31
+     /tmp/ccTBUrUW.s:2364   .debug_str:000000000000011b .LASF32
+     /tmp/ccTBUrUW.s:2594   .debug_str:00000000000005ca .LASF33
+     /tmp/ccTBUrUW.s:2472   .debug_str:000000000000039c .LASF34
+     /tmp/ccTBUrUW.s:2458   .debug_str:00000000000002ee .LASF35
+     /tmp/ccTBUrUW.s:2566   .debug_str:000000000000054f .LASF36
+     /tmp/ccTBUrUW.s:2492   .debug_str:0000000000000401 .LASF37
+     /tmp/ccTBUrUW.s:2580   .debug_str:000000000000058a .LASF38
+     /tmp/ccTBUrUW.s:2370   .debug_str:0000000000000138 .LASF39
+     /tmp/ccTBUrUW.s:2394   .debug_str:00000000000001ad .LASF40
+     /tmp/ccTBUrUW.s:2322   .debug_str:0000000000000000 .LASF41
+     /tmp/ccTBUrUW.s:2552   .debug_str:0000000000000507 .LASF42
+     /tmp/ccTBUrUW.s:2380   .debug_str:0000000000000166 .LASF43
+     /tmp/ccTBUrUW.s:2474   .debug_str:00000000000003a5 .LASF44
+     /tmp/ccTBUrUW.s:2512   .debug_str:000000000000045b .LASF45
+     /tmp/ccTBUrUW.s:2398   .debug_str:00000000000001e1 .LASF46
+     /tmp/ccTBUrUW.s:2494   .debug_str:000000000000040b .LASF47
+     /tmp/ccTBUrUW.s:2362   .debug_str:0000000000000115 .LASF48
+     /tmp/ccTBUrUW.s:2324   .debug_str:000000000000000c .LASF49
+     /tmp/ccTBUrUW.s:2502   .debug_str:000000000000042a .LASF50
+     /tmp/ccTBUrUW.s:2378   .debug_str:000000000000015f .LASF51
+     /tmp/ccTBUrUW.s:2426   .debug_str:000000000000025f .LASF52
+     /tmp/ccTBUrUW.s:2344   .debug_str:000000000000007f .LASF53
+     /tmp/ccTBUrUW.s:2372   .debug_str:0000000000000146 .LASF54
+     /tmp/ccTBUrUW.s:2410   .debug_str:0000000000000214 .LASF55
+     /tmp/ccTBUrUW.s:2456   .debug_str:00000000000002e7 .LASF56
+     /tmp/ccTBUrUW.s:2532   .debug_str:00000000000004b8 .LASF57
+     /tmp/ccTBUrUW.s:2584   .debug_str:00000000000005a4 .LASF58
+     /tmp/ccTBUrUW.s:2360   .debug_str:000000000000010f .LASF59
+     /tmp/ccTBUrUW.s:2576   .debug_str:000000000000057c .LASF60
+     /tmp/ccTBUrUW.s:2384   .debug_str:0000000000000175 .LASF61
+     /tmp/ccTBUrUW.s:2388   .debug_str:0000000000000186 .LASF62
+     /tmp/ccTBUrUW.s:2336   .debug_str:0000000000000042 .LASF63
+     /tmp/ccTBUrUW.s:2450   .debug_str:00000000000002d0 .LASF64
+     /tmp/ccTBUrUW.s:2332   .debug_str:000000000000002d .LASF65
+     /tmp/ccTBUrUW.s:2452   .debug_str:00000000000002d6 .LASF66
+     /tmp/ccTBUrUW.s:2522   .debug_str:0000000000000493 .LASF67
+     /tmp/ccTBUrUW.s:2538   .debug_str:00000000000004d2 .LASF68
+     /tmp/ccTBUrUW.s:2382   .debug_str:000000000000016e .LASF69
+GAS LISTING /tmp/ccTBUrUW.s 			page 6
+
+
+     /tmp/ccTBUrUW.s:2420   .debug_str:000000000000023d .LASF70
+     /tmp/ccTBUrUW.s:2404   .debug_str:00000000000001f5 .LASF71
+     /tmp/ccTBUrUW.s:2510   .debug_str:0000000000000456 .LASF72
+     /tmp/ccTBUrUW.s:2328   .debug_str:000000000000001c .LASF73
+     /tmp/ccTBUrUW.s:2518   .debug_str:0000000000000472 .LASF74
+     /tmp/ccTBUrUW.s:2514   .debug_str:0000000000000460 .LASF75
+     /tmp/ccTBUrUW.s:2476   .debug_str:00000000000003ad .LASF76
+     /tmp/ccTBUrUW.s:2516   .debug_str:0000000000000468 .LASF77
+     /tmp/ccTBUrUW.s:2440   .debug_str:00000000000002a8 .LASF78
+     /tmp/ccTBUrUW.s:2412   .debug_str:000000000000021a .LASF79
+     /tmp/ccTBUrUW.s:2592   .debug_str:00000000000005c5 .LASF80
+     /tmp/ccTBUrUW.s:2480   .debug_str:00000000000003bf .LASF81
+     /tmp/ccTBUrUW.s:2422   .debug_str:0000000000000245 .LASF82
+     /tmp/ccTBUrUW.s:2386   .debug_str:000000000000017e .LASF83
+     /tmp/ccTBUrUW.s:2486   .debug_str:00000000000003e9 .LASF84
+     /tmp/ccTBUrUW.s:2434   .debug_str:0000000000000286 .LASF85
+     /tmp/ccTBUrUW.s:2574   .debug_str:0000000000000572 .LASF86
+     /tmp/ccTBUrUW.s:2374   .debug_str:000000000000014e .LASF87
+     /tmp/ccTBUrUW.s:2368   .debug_str:0000000000000133 .LASF88
+     /tmp/ccTBUrUW.s:2540   .debug_str:00000000000004d9 .LASF89
+     /tmp/ccTBUrUW.s:2498   .debug_str:0000000000000418 .LASF90
+     /tmp/ccTBUrUW.s:2568   .debug_str:0000000000000559 .LASF91
+     /tmp/ccTBUrUW.s:2428   .debug_str:0000000000000265 .LASF92
+     /tmp/ccTBUrUW.s:2496   .debug_str:0000000000000412 .LASF93
+     /tmp/ccTBUrUW.s:2524   .debug_str:000000000000049a .LASF94
+     /tmp/ccTBUrUW.s:2526   .debug_str:00000000000004a2 .LASF95
+     /tmp/ccTBUrUW.s:2546   .debug_str:00000000000004ee .LASF96
+     /tmp/ccTBUrUW.s:2554   .debug_str:0000000000000510 .LASF97
+     /tmp/ccTBUrUW.s:2562   .debug_str:000000000000053d .LASF98
+     /tmp/ccTBUrUW.s:2550   .debug_str:00000000000004fa .LASF99
+     /tmp/ccTBUrUW.s:2438   .debug_str:000000000000029b .LASF100
+     /tmp/ccTBUrUW.s:2582   .debug_str:0000000000000595 .LASF101
+     /tmp/ccTBUrUW.s:2408   .debug_str:0000000000000205 .LASF102
+     /tmp/ccTBUrUW.s:2506   .debug_str:000000000000043e .LASF103
+     /tmp/ccTBUrUW.s:2586   .debug_str:00000000000005ab .LASF104
+     /tmp/ccTBUrUW.s:2508   .debug_str:0000000000000449 .LASF105
+     /tmp/ccTBUrUW.s:2590   .debug_str:00000000000005b7 .LASF106
+     /tmp/ccTBUrUW.s:2366   .debug_str:0000000000000125 .LASF107
+     /tmp/ccTBUrUW.s:2572   .debug_str:0000000000000568 .LASF108
+     /tmp/ccTBUrUW.s:2436   .debug_str:000000000000028f .LASF109
+     /tmp/ccTBUrUW.s:2558   .debug_str:000000000000051d .LASF110
+     /tmp/ccTBUrUW.s:2392   .debug_str:000000000000019f .LASF111
+     /tmp/ccTBUrUW.s:2348   .debug_str:0000000000000093 .LASF112
+     /tmp/ccTBUrUW.s:2390   .debug_str:000000000000018e .LASF113
+     /tmp/ccTBUrUW.s:2338   .debug_str:0000000000000048 .LASF114
+     /tmp/ccTBUrUW.s:2340   .debug_str:0000000000000057 .LASF115
+     /tmp/ccTBUrUW.s:2488   .debug_str:00000000000003ee .LASF116
+     /tmp/ccTBUrUW.s:2468   .debug_str:000000000000031b .LASF117
+     /tmp/ccTBUrUW.s:2460   .debug_str:00000000000002f8 .LASF118
+     /tmp/ccTBUrUW.s:2578   .debug_str:0000000000000582 .LASF119
+     /tmp/ccTBUrUW.s:2346   .debug_str:0000000000000088 .LASF134
+     /tmp/ccTBUrUW.s:2534   .debug_str:00000000000004be .LASF120
+     /tmp/ccTBUrUW.s:2560   .debug_str:000000000000052a .LASF121
+     /tmp/ccTBUrUW.s:2444   .debug_str:00000000000002b6 .LASF122
+     /tmp/ccTBUrUW.s:2462   .debug_str:0000000000000301 .LASF123
+     /tmp/ccTBUrUW.s:2466   .debug_str:0000000000000314 .LASF124
+     /tmp/ccTBUrUW.s:2544   .debug_str:00000000000004e7 .LASF125
+GAS LISTING /tmp/ccTBUrUW.s 			page 7
+
+
+     /tmp/ccTBUrUW.s:2588   .debug_str:00000000000005b0 .LASF126
+     /tmp/ccTBUrUW.s:2454   .debug_str:00000000000002de .LASF127
+     /tmp/ccTBUrUW.s:2334   .debug_str:0000000000000036 .LASF135
+     /tmp/ccTBUrUW.s:46     .text.handle_trap:0000000000000000 .LFB6
+     /tmp/ccTBUrUW.s:87     .text.handle_trap:000000000000003a .LFE6
+     /tmp/ccTBUrUW.s:2235   .debug_loc:0000000000000000 .LLST1
+     /tmp/ccTBUrUW.s:2430   .debug_str:000000000000026c .LASF128
+     /tmp/ccTBUrUW.s:2248   .debug_loc:0000000000000020 .LLST2
+     /tmp/ccTBUrUW.s:2259   .debug_loc:000000000000003e .LLST3
+     /tmp/ccTBUrUW.s:76     .text.handle_trap:0000000000000026 .LVL4
+     /tmp/ccTBUrUW.s:80     .text.handle_trap:0000000000000030 .LVL5
+     /tmp/ccTBUrUW.s:84     .text.handle_trap:0000000000000038 .LVL6
+     /tmp/ccTBUrUW.s:2448   .debug_str:00000000000002c5 .LASF136
+     /tmp/ccTBUrUW.s:14     .text.handle_nmi:0000000000000000 .LFB5
+     /tmp/ccTBUrUW.s:39     .text.handle_nmi:0000000000000022 .LFE5
+     /tmp/ccTBUrUW.s:2284   .debug_loc:0000000000000078 .LLST0
+     /tmp/ccTBUrUW.s:33     .text.handle_nmi:0000000000000018 .LVL0
+     /tmp/ccTBUrUW.s:37     .text.handle_nmi:0000000000000022 .LVL1
+     /tmp/ccTBUrUW.s:2330   .debug_str:0000000000000027 .LASF129
+     /tmp/ccTBUrUW.s:2354   .debug_str:00000000000000ef .LASF130
+     /tmp/ccTBUrUW.s:53     .text.handle_trap:0000000000000002 .LCFI1
+     /tmp/ccTBUrUW.s:49     .text.handle_trap:0000000000000000 .LVL2
+     /tmp/ccTBUrUW.s:68     .text.handle_trap:0000000000000012 .LVL3
+     /tmp/ccTBUrUW.s:22     .text.handle_nmi:0000000000000006 .LCFI0
+     /tmp/ccTBUrUW.s:107    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+write
+_exit
