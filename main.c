@@ -21,7 +21,7 @@ Libraries (other than vendor SDK and gcc libraries) must have .h-files in /lib/[
 #define TX_CHARACTERISTIC_UUID "e399efc079f94e0882a8f3aa1dc609f1"
 #define TX_MTU "14" //Hex
 #define TX_PROPERTY "1C" //
-#define TX_HANDLE "0074"
+#define TX_HANDLE 0x74
 
 enum command_enum {
 	COMMAND_MODE,
@@ -62,8 +62,8 @@ static const char* commands[] = {
 
 //Service:           PS,4028f84c05c04181843ebdbee6e1030d
 // 4028 f84c 05c0 4181 843e bdbe e6e1 030d
-//Characteristic RX: PC,e399efc079f94e0882a8f3aa1dc609f2,0c,14
-//Characteristic TX: PC,e399efc079f94e0882a8f3aa1dc609f1,1c,14
+//Characteristic RX: PC,e399 efc0 79f9 4e08 82a8 f3aa 1dc6 09f2,0c,14
+//Characteristic TX: PC,e399 efc0 79f9 4e08 82a8 f3aa 1dc6 09f1,1c,14
 
 void register_gatt_service(){
 
@@ -115,14 +115,14 @@ int read_handle(uint16_t handle, uint8_t* response_buffer, uint32_t timeout){
 
 void write_handle_raw(uint16_t handle, uint8_t* byte_data, uint8_t size){
 	uint8_t string_buffer[128] = {'\0'};
-	uint8_t data_buffer[(20*2)+1] = {'\0'};
+	uint8_t data_buffer[(20*2)+15] = {'\0'};
 	const uint8_t lut_hex[] = "0123456789ABCDEF";
 	for(int i = 0; i < size; i++){
 		data_buffer[i*2] = lut_hex[byte_data[i] / 16];
 		data_buffer[(i*2)+1] = lut_hex[byte_data[i] % 16];
 	}
 	data_buffer[size*2] = '\0';
-	sprintf(string_buffer, "%s%.4x,%s\r\n", commands[WRITE_HANDLE], handle, data_buffer);
+	sprintf(string_buffer, "%s%.4x,%s\r\n", "SHW,", handle, data_buffer);
 	lio_send_bt(string_buffer, strlen(string_buffer));
 }
 
@@ -149,7 +149,7 @@ int timer_config(uint32_t sample_rate)
     timer_initpara.prescaler         = 5399; //  108 000 000
     timer_initpara.alignedmode       = TIMER_COUNTER_EDGE;
     timer_initpara.counterdirection  = TIMER_COUNTER_UP;
-    timer_initpara.period            = sample_rate;
+    timer_initpara.period            = sample_rate - 1;
     timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
     timer_initpara.repetitioncounter = 0;
     timer_init(TIMER1,&timer_initpara);
@@ -293,20 +293,27 @@ void DMA0_Channel0_IRQHandler(void)
 	//to do calculations, although floats should probably be discouraged since no FPU is present.
     if(dma_interrupt_flag_get(DMA0, DMA_CH0, DMA_INT_FLAG_HTF)){ 
 		pSend_data = (uint8_t*)pSample_buffer;
+		dma_interrupt_flag_clear(DMA0, DMA_CH0, DMA_INT_FLAG_HTF);
     }
 	if(dma_interrupt_flag_get(DMA0, DMA_CH0, DMA_INT_FLAG_FTF)){ 
-		pSend_data = (uint8_t*)(pSample_buffer+(sample_buffer_size/2));     
+		pSend_data = (uint8_t*)(pSample_buffer+(sample_buffer_size/2)); 
+		dma_interrupt_flag_clear(DMA0, DMA_CH0, DMA_INT_FLAG_FTF);    
     }
-
-	write_handle_raw(0x0074, pSend_data, sample_buffer_size);
+	write_handle_raw(TX_HANDLE, pSend_data, sample_buffer_size);
+	
 	dma_interrupt_flag_clear(DMA0, DMA_CH0, DMA_INT_FLAG_G);
 }
 
+//TODO: Add fixed point library
+void emg_smoothing_filter(uint16_t* input, uint16_t input_size){
+	//Taps
+	//Filter length
 
-void emg_RMS_filter(uint16_t* input, uint16_t input_size){
 	//ingest samples
 
 	//remove bias - running average?
 
-	//RMS
+	//Rectify
+
+	//Lowpass
 }
